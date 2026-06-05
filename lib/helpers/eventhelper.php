@@ -335,8 +335,7 @@ class EventHelper extends Helper
         }
 
         $exportExists = $this->prepareExportEventSmsTemplate($exists);
-        if ($this->hasDiff($exportExists, $fields)) {
-            $this->outDiff($this->prepareExportEventSmsTemplate($exists), $fields);
+        if ($this->checkDiff($exportExists, $fields)) {
             return $this->updateEventSmsTemplate($exists['ID'], $fields);
         }
 
@@ -417,8 +416,7 @@ class EventHelper extends Helper
         }
 
         $exportExists = $this->prepareExportEventMessage($exists);
-        if ($this->hasDiff($exportExists, $fields)) {
-            $this->outDiff($exportExists, $fields);
+        if ($this->checkDiff($exportExists, $fields)) {
             return $this->updateEventMessageById($exists['ID'], $fields);
         }
 
@@ -447,8 +445,7 @@ class EventHelper extends Helper
         }
 
         $exportExists = $this->prepareExportEventType($exists);
-        if ($this->hasDiff($exportExists, $fields)) {
-            $this->outDiff($exportExists, $fields);
+        if ($this->checkDiff($exportExists, $fields)) {
             return $this->updateEventTypeById($exists['ID'], $fields);
         }
 

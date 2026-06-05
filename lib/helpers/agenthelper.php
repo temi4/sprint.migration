@@ -112,41 +112,17 @@ class AgentHelper extends Helper
         $fields = $this->prepareExportAgent($fields);
 
         if (empty($exists)) {
-            $ok = $this->addAgent($fields);
-            $this->outNoticeIf(
-                $ok,
-                Locale::getMessage(
-                    'AGENT_CREATED',
-                    [
-                        '#NAME#' => $fields['NAME'],
-                    ]
-                )
-            );
-            return $ok;
+            return $this->addAgent($fields);
+        }
+
+        if (strtotime($fields['NEXT_EXEC']) <= strtotime($exists['NEXT_EXEC'])) {
+            unset($fields['NEXT_EXEC']);
+            unset($exists['NEXT_EXEC']);
         }
 
         $exportExists = $this->prepareExportAgent($exists);
-
-        if (strtotime($fields['NEXT_EXEC']) <= strtotime($exportExists['NEXT_EXEC'])) {
-            unset($fields['NEXT_EXEC']);
-            unset($exportExists['NEXT_EXEC']);
-        }
-
-        if ($this->hasDiff($exportExists, $fields)) {
-            $ok = $this->updateAgent($fields);
-
-            $this->outNoticeIf(
-                $ok,
-                Locale::getMessage(
-                    'AGENT_UPDATED',
-                    [
-                        '#NAME#' => $fields['NAME'],
-                    ]
-                )
-            );
-
-            $this->outDiffIf($ok, $exportExists, $fields);
-            return $ok;
+        if ($this->checkDiff($exportExists, $fields)) {
+            return $this->updateAgent($fields);
         }
 
         return (int)$exists['ID'];
@@ -194,6 +170,7 @@ class AgentHelper extends Helper
         );
 
         if ($agentId) {
+            $this->outNotice(Locale::getMessage('AGENT_UPDATED', ['#NAME#' => $fields['NAME']]));
             return (int)$agentId;
         }
 

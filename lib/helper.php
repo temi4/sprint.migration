@@ -8,11 +8,11 @@ use CDBResult;
 use CMain;
 use ReflectionClass;
 use Sprint\Migration\Exceptions\HelperException;
-use Sprint\Migration\Traits\OutTrait;
+use Sprint\Migration\Output\OutputTrait;
 
 class Helper
 {
-    use OutTrait;
+    use OutputTrait;
 
     /**
      * @throws HelperException
@@ -47,7 +47,7 @@ class Helper
                 if (!Loader::includeModule($name)) {
                     return false;
                 }
-            } catch (LoaderException $e) {
+            } catch (LoaderException) {
                 return false;
             }
         }
@@ -73,20 +73,13 @@ class Helper
         return (new ReflectionClass($this))->getShortName();
     }
 
-    protected function hasDiff($exists, $fields): bool
+    protected function checkDiff(array $exists, array $fields, bool $strict = false): bool
     {
-        return ($exists != $fields);
-    }
-
-    /**
-     * @param $exists
-     * @param $fields
-     *
-     * @return bool
-     */
-    protected function hasDiffStrict($exists, $fields): bool
-    {
-        return ($exists !== $fields);
+        $hasDiff = $strict ? ($exists !== $fields) : ($exists != $fields);
+        if ($hasDiff) {
+            $this->outDiff($exists, $fields);
+        }
+        return $hasDiff;
     }
 
     /**

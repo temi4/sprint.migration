@@ -50,12 +50,6 @@ abstract class VersionBuilder extends Builder
         return addslashes(strip_tags(trim($descr)));
     }
 
-    protected function getVersionFile(string $versionName): string
-    {
-        $dir = $this->getVersionConfig()->getVal('migration_dir');
-        return $dir . '/' . $versionName . '.php';
-    }
-
     protected function getVersionName(): string
     {
         if (!isset($this->params['~version_name'])) {
@@ -115,7 +109,7 @@ abstract class VersionBuilder extends Builder
             $templateFile = Module::getModuleTemplateFile('version');
         }
 
-        $fileName = $this->getVersionFile($templateVars['version']);
+        $fileName = $this->getVersionConfig()->getVersionFile($templateVars['version']);
         $fileContent = $this->renderFile($templateFile, $templateVars);
 
         file_put_contents($fileName, $fileContent);

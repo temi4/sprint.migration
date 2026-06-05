@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__ . "/../lib/locale.php";
-
 \Sprint\Migration\Locale::loadLocale(
     "ru",
     [
@@ -60,6 +58,7 @@ require_once __DIR__ . "/../lib/locale.php";
         "CURRENT_USER"             => "Текущий пользователь",
         "BITRIX_VERSION"           => "Версия bitrix",
         "MODULE_VERSION"           => "Версия модуля",
+        "PHP_VERSION"              => "Версия php",
         "CFG_TITLE"                => "Миграции",
         "CONFIG"                   => "Конфигурация",
         "BUILDER_ERROR"            => "Ошибка",
@@ -79,7 +78,6 @@ require_once __DIR__ . "/../lib/locale.php";
 \Sprint\Migration\Locale::loadLocale(
     "ru",
     [
-        "CONFIG_archive"                     => "Архив",
         "CONFIG_migration_dir"               => "Директория для миграций",
         "CONFIG_migration_dir_absolute"      => "Абсолютный путь до migration_dir",
         "CONFIG_exchange_dir"                => "Директория для файлов данных",
@@ -96,7 +94,6 @@ require_once __DIR__ . "/../lib/locale.php";
         "CONFIG_yes"                         => "да",
         "CONFIG_no"                          => "нет",
         "CONFIG_version_name_template"       => "Шаблон названия миграции",
-        "CONFIG_tracker_task_url"            => "Шаблон ссылки на трекер задач",
         "CONFIG_version_timestamp_format"    => "Формат даты для создания файла миграции",
         "CONFIG_version_timestamp_pattern"   => "Регулярное выражение для поиска миграций по формату даты",
         "CONFIG_migration_hash_algo"         => "Алгоритм подсчета хеша для проверки изменений в файле миграции",
@@ -400,6 +397,8 @@ require_once __DIR__ . "/../lib/locale.php";
         "AGENT_UPDATED"                  => "Агент \"#NAME#\" обновлен",
         "AGENT_EQUAL"                    => "Агент \"#NAME#\" совпадает",
         "AGENT_DELETED"                  => "Агент \"#NAME#\" удален",
+        "WEBFORM_CREATED"                => "Форма \"#NAME#\" добавлена",
+        "WEBFORM_UPDATED"                => "Форма \"#NAME#\" обновлена",
         "EVENT_MESSAGE_CREATED"          => "Почтовый шаблон \"#NAME#\" добавлен",
         "EVENT_MESSAGE_UPDATED"          => "Почтовый шаблон \"#NAME#\" обновлен",
         "EVENT_MESSAGE_EQUAL"            => "Почтовый шаблон \"#NAME#\" совпадает",

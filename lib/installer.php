@@ -11,16 +11,12 @@ class Installer
     private VersionManager $versionManager;
 
     /**
-     * Installer constructor.
-     *
-     * @param array $configValues
-     *
      * @throws Exception
      */
     public function __construct(array $configValues = [])
     {
         $this->versionManager = new VersionManager(
-            new VersionConfig('installer', $configValues)
+            new VersionConfig(VersionEnum::CONFIG_INSTALLER, $configValues)
         );
     }
 

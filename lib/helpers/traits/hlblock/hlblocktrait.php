@@ -59,7 +59,7 @@ trait HlblockTrait
             $item['LANG'] = $langs;
         }
 
-        $lang = Locale::getLang();
+        $lang = Locale::getDefaultLang();
         if (!empty($item['LANG'][$lang]['NAME'])) {
             $item['TITLE'] = $item['LANG'][$lang]['NAME'];
         } elseif (!empty($item['LANG']['ru']['NAME'])) {
@@ -345,37 +345,12 @@ trait HlblockTrait
         $fields = $this->prepareExportHlblock($fields);
 
         if (empty($exists)) {
-            $ok = $this->addHlblock($fields);
-
-            $this->outNoticeIf(
-                $ok,
-                Locale::getMessage(
-                    'HLBLOCK_CREATED',
-                    [
-                        '#NAME#' => $fields['NAME'],
-                    ]
-                )
-            );
-
-            return $ok;
+            return $this->addHlblock($fields);
         }
 
         $exportExists = $this->prepareExportHlblock($exists);
-
-        if ($this->hasDiff($exportExists, $fields)) {
-            $ok = $this->updateHlblock($exists['ID'], $fields);
-            $this->outNoticeIf(
-                $ok,
-                Locale::getMessage(
-                    'HLBLOCK_UPDATED',
-                    [
-                        '#NAME#' => $fields['NAME'],
-                    ]
-                )
-            );
-
-            $this->outDiffIf($ok, $exportExists, $fields);
-            return $ok;
+        if ($this->checkDiff($exportExists, $fields)) {
+            return $this->updateHlblock($exists['ID'], $fields);
         }
 
         return $exists['ID'];
@@ -401,6 +376,7 @@ trait HlblockTrait
             $result = HighloadBlockTable::add($fields);
             if ($result->isSuccess()) {
                 $this->replaceHblockLangs($result->getId(), $lang);
+                $this->outNotice(Locale::getMessage('HLBLOCK_CREATED', ['#NAME#' => $fields['NAME']]));
                 return (int)$result->getId();
             }
 
@@ -496,6 +472,9 @@ trait HlblockTrait
 
             if ($result->isSuccess()) {
                 $this->replaceHblockLangs($hlblockId, $lang);
+
+                $this->outNotice(Locale::getMessage('HLBLOCK_UPDATED', ['#NAME#' => $fields['NAME']]));
+
                 return $hlblockId;
             }
 

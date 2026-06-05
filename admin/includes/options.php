@@ -1,41 +1,44 @@
 <?php
 
+use Sprint\Migration\ConfigManager;
 use Sprint\Migration\Locale;
 use Sprint\Migration\Module;
 use Sprint\Migration\Out;
-use Sprint\Migration\VersionConfig;
 
 $request = Bitrix\Main\Context::getCurrent()->getRequest();
+$output = new \Sprint\Migration\Output\HtmlOutput();
 
 if ($request->isPost() && check_bitrix_sessid()) {
     if ($request->getPost("options_remove")) {
         Module::removeDbOptions();
-        Out::outSuccess(
+        $output->outSuccess(
             Locale::getMessage('OPTIONS_REMOVE_success')
         );
     }
 
     if ($request->getPost("configuration_remove")) {
-        $versionConfig = new VersionConfig();
-        if ($versionConfig->deleteConfig($request->getPost('configuration_name'))) {
-            Out::outSuccess(
+        if (ConfigManager::getInstance()->deleteConfig(
+            $request->getPost('configuration_name')
+        )) {
+            $output->outSuccess(
                 Locale::getMessage('BUILDER_Cleaner_success')
             );
         } else {
-            Out::outError(
+            $output->outError(
                 Locale::getMessage('BUILDER_Cleaner_error')
             );
         }
     }
 
     if ($request->getPost("configuration_create")) {
-        $versionConfig = new VersionConfig();
-        if ($versionConfig->createConfig($request->getPost('configuration_name'))) {
-            Out::outSuccess(
+        if (ConfigManager::getInstance()->createConfig(
+            $request->getPost('configuration_name')
+        )) {
+            $output->outSuccess(
                 Locale::getMessage('BUILDER_Configurator_success')
             );
         } else {
-            Out::outError(
+            $output->outError(
                 Locale::getMessage('BUILDER_Configurator_error')
             );
         }
@@ -45,7 +48,7 @@ if ($request->isPost() && check_bitrix_sessid()) {
         /** @var $tmpmodule sprint_migration */
         $tmpmodule = CModule::CreateModuleObject(Module::ID);
         $tmpmodule->installGadgets();
-        Out::outSuccess(
+        $output->outSuccess(
             Locale::getMessage('GD_INSTALL_success')
         );
     }
@@ -53,7 +56,6 @@ if ($request->isPost() && check_bitrix_sessid()) {
 ?>
 
 <?php include __DIR__ . '/help.php' ?>
-<div class="sp-separator"></div>
 
 <div class="sp-table">
     <div class="sp-row2">

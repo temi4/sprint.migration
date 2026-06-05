@@ -57,6 +57,7 @@ class UserOptionsHelper extends Helper
 
     /**
      * @param array $params
+     *
      * @throws HelperException
      * @return array|bool|mixed
      */
@@ -100,6 +101,7 @@ class UserOptionsHelper extends Helper
     /**
      * @param array $data
      * @param array $params
+     *
      * @throws HelperException
      * @return bool
      */
@@ -111,9 +113,9 @@ class UserOptionsHelper extends Helper
         if (!isset($data['columns'])) {
             $data = [
                 'columns'   => is_array($data) ? $data : [],
-                'page_size' => isset($params['page_size']) ? $params['page_size'] : '',
-                'order'     => isset($params['order']) ? $params['order'] : '',
-                'by'        => isset($params['by']) ? $params['by'] : '',
+                'page_size' => $params['page_size'] ?? '',
+                'order'     => $params['order'] ?? '',
+                'by'        => $params['by'] ?? '',
             ];
         }
 
@@ -159,31 +161,23 @@ class UserOptionsHelper extends Helper
             true
         );
 
+        $this->outNotice(Locale::getMessage('USER_OPTION_LIST_CREATED', ['#NAME#' => $params['name']]));
+
         return true;
     }
 
     /**
      * @param array $data
      * @param array $params
+     *
      * @throws HelperException
      * @return bool
      */
     public function saveList($data = [], $params = [])
     {
         $exists = $this->exportList($params);
-        if ($this->hasDiff($exists, $data)) {
-            $ok = $this->buildList($data, $params);
-            $this->outNoticeIf(
-                $ok,
-                Locale::getMessage(
-                    'USER_OPTION_LIST_CREATED',
-                    [
-                        '#NAME#' => $params['name'],
-                    ]
-                )
-            );
-            $this->outDiffIf($ok, $exists, $data);
-            return $ok;
+        if ($this->checkDiff($exists, $data)) {
+            return $this->buildList($data, $params);
         }
 
         return true;
@@ -229,25 +223,15 @@ class UserOptionsHelper extends Helper
             true
         );
 
+        $this->outNotice(Locale::getMessage('USER_OPTION_GRID_CREATED', ['#NAME#' => $gridId]));
         return true;
     }
 
     public function saveGrid($gridId, $params = [])
     {
         $exists = $this->exportGrid($gridId);
-        if ($this->hasDiff($exists, $params)) {
-            $ok = $this->buildGrid($gridId, $params);
-            $this->outNoticeIf(
-                $ok,
-                Locale::getMessage(
-                    'USER_OPTION_GRID_CREATED',
-                    [
-                        '#NAME#' => $gridId,
-                    ]
-                )
-            );
-            $this->outDiffIf($ok, $exists, $params);
-            return $ok;
+        if ($this->checkDiff($exists, $params)) {
+            return $this->buildGrid($gridId, $params);
         }
 
         return true;
@@ -255,6 +239,7 @@ class UserOptionsHelper extends Helper
 
     /**
      * @param array $params
+     *
      * @throws HelperException
      * @return array
      */
@@ -328,6 +313,7 @@ class UserOptionsHelper extends Helper
     /**
      * @param array $formData
      * @param array $params
+     *
      * @throws HelperException
      * @return bool
      */
@@ -405,31 +391,23 @@ class UserOptionsHelper extends Helper
             true
         );
 
+        $this->outNotice(Locale::getMessage('USER_OPTION_FORM_CREATED', ['#NAME#' => $params['name']]));
+
         return true;
     }
 
     /**
      * @param array $formData
      * @param array $params
+     *
      * @throws HelperException
      * @return bool
      */
     public function saveForm($formData = [], $params = [])
     {
         $exists = $this->exportForm($params);
-        if ($this->hasDiffStrict($exists, $formData)) {
-            $ok = $this->buildForm($formData, $params);
-            $this->outNoticeIf(
-                $ok,
-                Locale::getMessage(
-                    'USER_OPTION_FORM_CREATED',
-                    [
-                        '#NAME#' => $params['name'],
-                    ]
-                )
-            );
-            $this->outDiffIf($ok, $exists, $formData);
-            return $ok;
+        if ($this->checkDiff($exists, $formData, true)) {
+            return $this->buildForm($formData, $params);
         }
         return true;
     }

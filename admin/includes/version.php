@@ -5,15 +5,15 @@ use Sprint\Migration\VersionConfig;
 
 /** @var $versionConfig VersionConfig */
 
-$getOnclickMenu = function () {
+$getOnclickMenu = function () use ($versionConfig) {
     $menu = [];
     $menu[] = [
-        'TEXT'    => Locale::getMessage('UP_START_WITH_TAG'),
-        'ONCLICK' => 'migrationMigrationsUpWithTag()',
+            'TEXT'    => Locale::getMessage('UP_START_WITH_TAG'),
+            'ONCLICK' => 'migrationMigrationsUpWithTag()',
     ];
     $menu[] = [
-        'TEXT'    => Locale::getMessage('DOWN_START'),
-        'ONCLICK' => 'migrationMigrationsDownConfirm()',
+            'TEXT'    => Locale::getMessage('DOWN_START'),
+            'ONCLICK' => 'migrationMigrationsDownConfirm()',
     ];
     return CUtil::PhpToJSObject($menu);
 }
@@ -53,7 +53,7 @@ $getOnclickMenu = function () {
                    href="javascript:void(0)"
                    class="adm-btn"
                    hidefocus="true">&equiv;</a>
-                <div id="migration_loading"><?= Locale::getMessage('LOADING_TEXT') ?></div>
+                <span id="migration_loading"><?= Locale::getMessage('LOADING_TEXT') ?></span>
             </div>
             <div class="sp-col">
                 <div id="migration_progress"></div>
@@ -63,5 +63,4 @@ $getOnclickMenu = function () {
     </div>
     <div class="sp-separator"></div>
     <?php include __DIR__ . '/builder_group.php' ?>
-    <div class="sp-separator"></div>
 </div>

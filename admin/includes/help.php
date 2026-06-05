@@ -12,7 +12,9 @@ $isSettinsPage = strpos($APPLICATION->GetCurPage(), 'settings.php');
     <div class="sp-row2">
         <div class="sp-col">
             <div style="margin-bottom: 10px;">
-                <?= Locale::getMessage('MODULE_VERSION') ?>: <?= Module::getVersion() ?>
+                <?= Locale::getMessage('MODULE_VERSION') ?>: <?= Module::getVersion() ?><br/>
+                <?= Locale::getMessage('PHP_VERSION') ?>: <?= (defined('PHP_VERSION') ? PHP_VERSION : '') ?><br/>
+                <?= Locale::getMessage('BITRIX_VERSION') ?>: <?= (defined('SM_VERSION') ? SM_VERSION : '') ?>
             </div>
             <div style="margin-bottom: 10px;">
                 <?php if ($isSettinsPage): ?>
@@ -25,7 +27,7 @@ $isSettinsPage = strpos($APPLICATION->GetCurPage(), 'settings.php');
         <div class="sp-col">
             <div style="margin-bottom: 10px;">
                 <?= Locale::getMessage('LINK_MP') ?> <br/>
-                <a href="http://marketplace.1c-bitrix.ru/solutions/sprint.migration/" target="_blank">http://marketplace.1c-bitrix.ru/solutions/sprint.migration/</a>
+                <a href="https://marketplace.1c-bitrix.ru/solutions/sprint.migration/" target="_blank">https://marketplace.1c-bitrix.ru/solutions/sprint.migration/</a>
             </div>
             <div style="margin-bottom: 10px;">
                 <?= Locale::getMessage('LINK_COMPOSER') ?>
@@ -42,7 +44,7 @@ $isSettinsPage = strpos($APPLICATION->GetCurPage(), 'settings.php');
                 <br/>
                 <a href="https://dev.1c-bitrix.ru/community/webdev/user/39653/blog/" target="_blank">https://dev.1c-bitrix.ru/community/webdev/user/39653/blog/</a>
             </div>
-            <div style="margin-bottom: 10px;">
+             <div style="margin-bottom: 10px;">
                 <?= Locale::getMessage('LINK_TELEGRAM') ?>
                 <br/>
                 <a href="https://t.me/sprint_migration_bitrix">https://t.me/sprint_migration_bitrix</a>
@@ -50,3 +52,4 @@ $isSettinsPage = strpos($APPLICATION->GetCurPage(), 'settings.php');
         </div>
     </div>
 </div>
+<div class="sp-separator"></div>

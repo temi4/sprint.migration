@@ -30,32 +30,11 @@ trait IblockFieldTrait
         $fields = array_replace_recursive($exportExists, $fields);
 
         if (empty($exists)) {
-            $ok = $this->updateIblockFields($iblockId, $fields);
-            $this->outNoticeIf(
-                $ok,
-                Locale::getMessage(
-                    'IB_FIELDS_CREATED',
-                    [
-                        '#NAME#' => $iblockId,
-                    ]
-                )
-            );
-            return $ok;
+            return $this->updateIblockFields($iblockId, $fields);
         }
 
-        if ($this->hasDiff($exportExists, $fields)) {
-            $ok = $this->updateIblockFields($iblockId, $fields);
-            $this->outNoticeIf(
-                $ok,
-                Locale::getMessage(
-                    'IB_FIELDS_UPDATED',
-                    [
-                        '#NAME#' => $iblockId,
-                    ]
-                )
-            );
-            $this->outDiffIf($ok, $exportExists, $fields);
-            return $ok;
+        if ($this->checkDiff($exportExists, $fields)) {
+            return $this->updateIblockFields($iblockId, $fields);
         }
 
         return true;
@@ -79,6 +58,7 @@ trait IblockFieldTrait
     {
         if ($iblockId && !empty($fields)) {
             CIBlock::SetFields($iblockId, $fields);
+            $this->outNotice(Locale::getMessage('IB_FIELDS_UPDATED', ['#NAME#' => $iblockId]));
             return true;
         }
         return false;

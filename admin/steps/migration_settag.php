@@ -2,6 +2,7 @@
 
 use Sprint\Migration\VersionConfig;
 use Sprint\Migration\VersionManager;
+use Sprint\Migration\Output;
 
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
@@ -12,15 +13,17 @@ $existsEvents = (
 );
 
 if ($existsEvents && check_bitrix_sessid()) {
-
     /** @var $versionConfig VersionConfig */
     $versionManager = new VersionManager($versionConfig);
+    $logger = Output::getInstance();
 
-    $version = !empty($_POST['version']) ? $_POST['version'] : '';
+    $versionName = !empty($_POST['version']) ? (string)$_POST['version'] : '';
+    $versionConfig->tryVersionName($versionName);
+
     $settag = !empty($_POST['settag']) ? $_POST['settag'] : '';
 
-    $settagresult = $versionManager->setMigrationTag($version, $settag);
-    Sprint\Migration\Out::outMessages($settagresult);
+    $settagresult = $versionManager->setMigrationTag($versionName, $settag);
+    $logger->outMessages($settagresult);
     ?>
     <script>
         migrationListRefresh(function () {

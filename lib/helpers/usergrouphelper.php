@@ -122,7 +122,7 @@ class UserGroupHelper extends Helper
         }
 
         if (!empty($item['SECURITY_POLICY'])) {
-            $item['SECURITY_POLICY'] = unserialize($item['SECURITY_POLICY']);
+            $item['SECURITY_POLICY'] = unserialize($item['SECURITY_POLICY'], ['allowed_classes' => false]);
         }
 
         if ($item['ID'] == 1) {
@@ -160,34 +160,13 @@ class UserGroupHelper extends Helper
         $fields = $this->prepareExportGroup($fields);
 
         if (empty($exists)) {
-            $ok = $this->addGroup($fields['STRING_ID'], $fields);
-            $this->outNoticeIf(
-                $ok,
-                Locale::getMessage(
-                    'USER_GROUP_CREATED',
-                    [
-                        '#NAME#' => $fields['NAME'],
-                    ]
-                )
-            );
-            return $ok;
+            return $this->addGroup($fields['STRING_ID'], $fields);
         }
 
         $exportExists = $this->prepareExportGroup($exists);
 
-        if ($this->hasDiff($exportExists, $fields)) {
-            $ok = $this->updateGroup($exists['ID'], $fields);
-            $this->outNoticeIf(
-                $ok,
-                Locale::getMessage(
-                    'USER_GROUP_UPDATED',
-                    [
-                        '#NAME#' => $fields['NAME'],
-                    ]
-                )
-            );
-            $this->outDiffIf($ok, $exportExists, $fields);
-            return $ok;
+        if ($this->checkDiff($exportExists, $fields)) {
+            return $this->updateGroup($exists['ID'], $fields);
         }
 
         return (int)$exists['ID'];
@@ -237,6 +216,8 @@ class UserGroupHelper extends Helper
         $groupId = $group->Add($this->prepareFields($fields));
 
         if ($groupId) {
+            $this->outNotice(Locale::getMessage('USER_GROUP_CREATED', ['#NAME#' => $fields['NAME']]));
+
             return (int)$groupId;
         }
 
@@ -258,6 +239,7 @@ class UserGroupHelper extends Helper
 
         $group = new CGroup;
         if ($group->Update($groupId, $this->prepareFields($fields))) {
+            $this->outNotice(Locale::getMessage('USER_GROUP_UPDATED', ['#NAME#' => $fields['NAME']]));
             return $groupId;
         }
 

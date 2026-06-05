@@ -92,32 +92,11 @@ class OptionHelper extends Helper
         ]);
 
         if (empty($exists)) {
-            $ok = $this->setOption($fields);
-            $this->outNoticeIf(
-                $ok,
-                Locale::getMessage(
-                    'OPTION_CREATED',
-                    [
-                        '#NAME#' => $fields['MODULE_ID'] . ':' . $fields['NAME'],
-                    ]
-                )
-            );
-            return $ok;
+            return $this->setOption($fields);
         }
 
-        if ($this->hasDiff($exists, $fields)) {
-            $ok = $this->setOption($fields);
-            $this->outNoticeIf(
-                $ok,
-                Locale::getMessage(
-                    'OPTION_UPDATED',
-                    [
-                        '#NAME#' => $fields['MODULE_ID'] . ':' . $fields['NAME'],
-                    ]
-                )
-            );
-            $this->outDiffIf($ok, $exists, $fields);
-            return $ok;
+        if ($this->checkDiff($exists, $fields)) {
+            return $this->setOption($fields);
         }
 
         return true;
@@ -150,6 +129,7 @@ class OptionHelper extends Helper
         $fields = $this->revertOption($fields);
         try {
             Option::set($fields['MODULE_ID'], $fields['NAME'], $fields['VALUE']);
+            $this->outNotice(Locale::getMessage('OPTION_UPDATED', ['#NAME#' => $fields['MODULE_ID'] . ':' . $fields['NAME']]));
             return true;
         } catch (Exception) {
         }
@@ -160,7 +140,7 @@ class OptionHelper extends Helper
     {
         if (!empty($item['VALUE']) && !is_numeric($item['VALUE'])) {
             if ($this->isSerialize($item['VALUE'])) {
-                $item['VALUE'] = unserialize($item['VALUE']);
+                $item['VALUE'] = unserialize($item['VALUE'], ['allowed_classes' => false]);
             } elseif ($this->isJson($item['VALUE'])) {
                 $item['VALUE'] = json_decode($item['VALUE'], true);
                 $item['TYPE'] = 'json';
@@ -190,7 +170,7 @@ class OptionHelper extends Helper
 
     protected function isSerialize($string): bool
     {
-        return (unserialize($string) !== false || $string == 'b:0;');
+        return (unserialize($string, ['allowed_classes' => false]) !== false || $string == 'b:0;');
     }
 
     protected function isJson($string): bool

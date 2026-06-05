@@ -19,9 +19,9 @@ if ($updater && $updater instanceof CUpdater) {
 
 
     $filesToRemove = [
-//        '.github/FUNDING.yml',
-//        'admin/assets/....js',
-//        'lib/traits/....php',
+        'admin/includes/interface.php',
+        'lib/out.php',
+        'lib/traits/outtrait.php',
     ];
 
     $moduleRootDir = $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/sprint.migration/';
@@ -36,5 +36,5 @@ if ($updater && $updater instanceof CUpdater) {
         $updater->CopyFiles("install/gadgets/", "gadgets/");
     }
 
-    //v 4.12.4
+    //v 5.3
 }

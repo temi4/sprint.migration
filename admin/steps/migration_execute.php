@@ -2,26 +2,32 @@
 
 use Sprint\Migration\Enum\VersionEnum;
 use Sprint\Migration\Locale;
-use Sprint\Migration\Out;
 use Sprint\Migration\VersionConfig;
 use Sprint\Migration\VersionManager;
+use Sprint\Migration\Output;
 
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
+/** @var $versionConfig VersionConfig */
 
 if ($_POST["step_code"] == "migration_execute" && check_bitrix_sessid()) {
-    /** @var $versionConfig VersionConfig */
+
     $versionManager = new VersionManager($versionConfig);
+    $logger = Output::getInstance();
+
+    $versionName = !empty($_POST['version']) ? (string)$_POST['version'] : '';
+    $versionConfig->tryVersionName($versionName);
 
     $params = !empty($_POST['params']) ? $_POST['params'] : [];
     $restart = !empty($_POST['restart']) ? 1 : 0;
-    $versionName = !empty($_POST['version']) ? $_POST['version'] : '';
+
     $action = !empty($_POST['action']) ? $_POST['action'] : '';
     $nextAction = !empty($_POST['next_action']) ? $_POST['next_action'] : '';
     $settag = !empty($_POST['settag']) ? trim($_POST['settag']) : '';
     $search = !empty($_POST['search']) ? trim($_POST['search']) : '';
     $migrationView = !empty($_POST['migration_view']) ? trim($_POST['migration_view']) : '';
+
 
     $filter = [
         'search'   => $search,
@@ -49,7 +55,7 @@ if ($_POST["step_code"] == "migration_execute" && check_bitrix_sessid()) {
 
     if ($versionName && $action) {
         if (!$restart) {
-            Out::out('[%s]%s (%s) start[/]', $action, $versionName, $action);
+            $logger->outInfo('%s (%s) start', $versionName, $action);
         }
 
         $success = $versionManager->startMigration(
@@ -62,7 +68,7 @@ if ($_POST["step_code"] == "migration_execute" && check_bitrix_sessid()) {
         $restart = ($success) ? $versionManager->needRestart() : $restart;
 
         if ($success && !$restart) {
-            Out::out('%s (%s) success', $versionName, $action);
+            $logger->outNotice('%s (%s) success', $versionName, $action);
 
             if ($nextAction) {
                 $json = json_encode([
@@ -103,7 +109,7 @@ if ($_POST["step_code"] == "migration_execute" && check_bitrix_sessid()) {
         }
 
         if (!$success) {
-            Out::outException($versionManager->getLastException());
+            $logger->outException($versionManager->getLastException());
 
             $json = json_encode([
                 'params'         => $params,

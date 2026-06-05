@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__ . "/../lib/locale.php";
-
 \Sprint\Migration\Locale::loadLocale(
     "en",
     [
@@ -60,6 +58,7 @@ require_once __DIR__ . "/../lib/locale.php";
         "CURRENT_USER"             => "Current user",
         "BITRIX_VERSION"           => "Bitrix version",
         "MODULE_VERSION"           => "Module version",
+        "PHP_VERSION"              => "PHP version",
         "CFG_TITLE"                => "Migrations",
         "CONFIG"                   => "Configuration",
         "BUILDER_ERROR"            => "Error",
@@ -79,7 +78,6 @@ require_once __DIR__ . "/../lib/locale.php";
 \Sprint\Migration\Locale::loadLocale(
     "en",
     [
-        "CONFIG_archive"                     => "Archive",
         "CONFIG_migration_dir"               => "Directory for migration",
         "CONFIG_migration_dir_absolute"      => "Is absolute path migration_dir",
         "CONFIG_exchange_dir"                => "Directory for exchange files",
@@ -96,7 +94,6 @@ require_once __DIR__ . "/../lib/locale.php";
         "CONFIG_yes"                         => "yes",
         "CONFIG_no"                          => "no",
         "CONFIG_version_name_template"       => "Version name template",
-        "CONFIG_tracker_task_url"            => "Task url template",
         "CONFIG_version_timestamp_format"    => "Timestamp format for creating migration file",
         "CONFIG_version_timestamp_pattern"   => "Timestamp pattern for search migration files by timestamp format",
         "CONFIG_migration_hash_algo"         => "Hash algorithm for checking changes in the migration file",
@@ -402,6 +399,8 @@ require_once __DIR__ . "/../lib/locale.php";
         "AGENT_UPDATED"                  => "Agent \"#NAME#\" updated",
         "AGENT_EQUAL"                    => "Agent \"#NAME#\" equivalent",
         "AGENT_DELETED"                  => "Agent \"#NAME#\" deleted",
+        "WEBFORM_CREATED"                => "Webform \"#NAME#\" created",
+        "WEBFORM_UPDATED"                => "Webform \"#NAME#\" updated",
         "EVENT_MESSAGE_CREATED"          => "Event message \"#NAME#\" created",
         "EVENT_MESSAGE_UPDATED"          => "Event message \"#NAME#\" updated",
         "EVENT_MESSAGE_EQUAL"            => "Event message \"#NAME#\" equivalent",

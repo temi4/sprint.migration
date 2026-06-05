@@ -2,7 +2,6 @@
 
 namespace Sprint\Migration;
 
-use DirectoryIterator;
 use Sprint\Migration\Builders\AgentBuilder;
 use Sprint\Migration\Builders\BlankBuilder;
 use Sprint\Migration\Builders\CacheCleanerBuilder;
@@ -16,195 +15,161 @@ use Sprint\Migration\Builders\IblockDeleteBuilder;
 use Sprint\Migration\Builders\IblockElementsBuilder;
 use Sprint\Migration\Builders\IblockPropertyBuilder;
 use Sprint\Migration\Builders\MarkerBuilder;
-use Sprint\Migration\Builders\OrderPropertiesBuilder;
 use Sprint\Migration\Builders\MedialibElementsBuilder;
 use Sprint\Migration\Builders\OptionBuilder;
+use Sprint\Migration\Builders\OrderPropertiesBuilder;
 use Sprint\Migration\Builders\TransferBuilder;
 use Sprint\Migration\Builders\UserGroupBuilder;
 use Sprint\Migration\Builders\UserOptionsBuilder;
 use Sprint\Migration\Builders\UserTypeEntitiesBuilder;
-use Sprint\Migration\Enum\EventsEnum;
 use Sprint\Migration\Enum\VersionEnum;
 use Sprint\Migration\Exceptions\MigrationException;
 
 class VersionConfig
 {
-    private $configCurrent = '';
-    private $configList = [];
+    private string $name;
+    private array $values;
+    private string $path;
 
     /**
-     * VersionConfig constructor.
-     *
-     * @param string $configName
-     * @param array $configValues
-     *
      * @throws MigrationException
      */
-    public function __construct($configName = '', $configValues = [])
+    public function __construct(string $name, array $values, string $path = '')
     {
-        if (!is_string($configName) || !is_array($configValues)) {
-            throw new MigrationException("Config params error");
-        }
-
-        if (!empty($configName) && !empty($configValues)) {
-            $this->initializeByValues($configName, $configValues);
-        } else {
-            $this->initializeByName($configName);
-        }
+        $this->name = $name;
+        $this->path = $path;
+        $this->values = $this->makeValues($values);
     }
 
-    /**
-     * @param $configName
-     * @param $configValues
-     *
-     * @throws MigrationException
-     */
-    protected function initializeByValues($configName, $configValues)
+    public function getName(): string
     {
-        $this->configList = [
-            $configName => $this->prepare($configName, $configValues),
-        ];
-
-        $this->configCurrent = $configName;
+        return $this->name;
     }
 
-    /**
-     * @param $configName
-     *
-     * @throws MigrationException
-     */
-    protected function initializeByName($configName)
+    public function getTitle(): string
     {
-        $this->configList = $this->searchConfigs(Module::getPhpInterfaceDir());
+        return sprintf('%s (%s)', $this->getVal('title'), $this->name);
+    }
 
-        $events = GetModuleEvents(Module::ID, EventsEnum::ON_SEARCH_CONFIG_FILES, true);
+    public function getValues(): array
+    {
+        return $this->values;
+    }
 
-        foreach ($events as $aEvent) {
-            $customPath = (string)ExecuteModuleEventEx($aEvent);
-            $this->configList = array_merge($this->configList, $this->searchConfigs($customPath));
-        }
+    public function getPath(): string
+    {
+        return $this->path;
+    }
 
-        if (!isset($this->configList[VersionEnum::CONFIG_DEFAULT])) {
-            $this->configList[VersionEnum::CONFIG_DEFAULT] = $this->prepare(VersionEnum::CONFIG_DEFAULT);
-        }
+    public function getSort(): int
+    {
+        $sort = (int)$this->getVal('sort', 200);
 
-        uasort(
-            $this->configList,
-            function ($a, $b) {
-                return ($a['sort'] <=> $b['sort']);
+        return ($this->getName() == VersionEnum::CONFIG_DEFAULT) ? 100 : $sort;
+    }
+
+    public function getVal(string $name, mixed $default = ''): mixed
+    {
+        return $this->values[$name] ?? $default;
+    }
+
+    public function humanValues(): array
+    {
+        $human = [];
+
+        foreach ($this->getValues() as $key => $val) {
+            if ($val === true || $val === false) {
+                $val = ($val) ? 'yes' : 'no';
+                $val = Locale::getMessage('CONFIG_' . $val);
+            } elseif (is_array($val)) {
+                $fres = [];
+                foreach ($val as $fkey => $fval) {
+                    $fres[] = '[' . $fkey . '] => ' . $fval;
+                }
+                $val = implode(PHP_EOL, $fres);
             }
-        );
-
-        if (isset($this->configList[$configName])) {
-            $this->configCurrent = $configName;
-        } else {
-            $this->configCurrent = VersionEnum::CONFIG_DEFAULT;
+            $human[$key] = (string)$val;
         }
+        return $human;
     }
 
     /**
-     * @param string $key
-     *
-     * @return mixed
+     * @throws MigrationException
      */
-    public function getCurrent($key = '')
-    {
-        return ($key) ? $this->configList[$this->configCurrent][$key] : $this->configList[$this->configCurrent];
-    }
-
-    public function getList(): array
-    {
-        return $this->configList;
-    }
-
-    public function getName()
-    {
-        return $this->configList[$this->configCurrent]['name'];
-    }
-
     public function getVersionExchangeDir(string $versionName): string
     {
-        $dir = $this->getVal('exchange_dir');
-        return $dir . '/' . $versionName . '_files/';
-    }
+        $this->tryVersionName($versionName);
 
-    protected function searchConfigs($directory)
-    {
-        $result = [];
-        $directory = new DirectoryIterator($directory);
-        foreach ($directory as $item) {
-            if (!$item->isFile()) {
-                continue;
-            }
-
-            $configName = $this->getConfigName($item->getFilename());
-            if (!$configName) {
-                continue;
-            }
-
-            $values = include $item->getPathname();
-            if (!is_array($values)) {
-                continue;
-            }
-
-            $result[$configName] = $this->prepare($configName, $values, $item->getPathname());
-        }
-
-        return $result;
+        return $this->getVal('exchange_dir') . '/' . $versionName . '_files/';
     }
 
     /**
-     * @param $fileName
-     *
-     * @return string
+     * @throws MigrationException
      */
-    protected function getConfigName($fileName): string
+    public function getVersionFile(string $versionName): string
     {
-        if (preg_match('/^migrations\.([a-z0-9_-]*)\.php$/i', $fileName, $matches)) {
-            return $matches[1];
+        $this->tryVersionName($versionName);
+
+        return $this->getVal('migration_dir') . '/' . $versionName . '.php';
+    }
+
+    public function checkVersionName(string $versionName): bool
+    {
+        //имя версии долджно быть валидным названием php-класса
+        //первый символ: буква или подчёркивание
+        //далее любые буквы, цифры, подчёркивания
+        //не должно содержать разделителей пути
+        return ($versionName && preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $versionName));
+    }
+
+    /**
+     * @throws MigrationException
+     */
+    public function tryVersionName(string $versionName): void
+    {
+        if (
+            !$this->checkVersionName($versionName) ||
+            !$this->getVersionTimestamp($versionName)
+        ) {
+            throw new MigrationException('Invalid version name');
+        }
+    }
+
+    public function getVersionTimestamp(string $versionName): string
+    {
+        $pattern = $this->getVal('version_timestamp_pattern');
+
+        $matches = [];
+        if (preg_match($pattern, $versionName, $matches)) {
+            return end($matches);
+        }
+
+        return '';
+    }
+
+    public function getWebDir(): string
+    {
+        $dir = $this->getVal('migration_dir');
+        if (str_starts_with($dir, Module::getDocRoot())) {
+            return substr($dir, strlen(Module::getDocRoot()));
         }
         return '';
     }
 
-    /**
-     * @param       $configName
-     * @param array $configValues
-     * @param false $file
-     *
-     * @return array
-     * @throws MigrationException
-     */
-    protected function prepare($configName, $configValues = [], $file = false): array
+    public function getLogger()
     {
-        $configValues = $this->prepareValues($configValues);
-
-        if (!empty($configValues['title'])) {
-            $title = sprintf('%s (%s)', $configValues['title'], $configName);
-        } else {
-            $title = sprintf('%s (%s)', Locale::getMessage('CFG_TITLE'), $configName);
-        }
-
-        if (isset($configValues['title'])) {
-            unset($configValues['title']);
-        }
-
-        return [
-            'name' => $configName,
-            'sort' => $this->getSort($configName),
-            'title' => $title,
-            'file' => $file,
-            'values' => $configValues,
-        ];
+        return $this->getVal('logger', null);
     }
 
     /**
-     * @param array $values
-     *
-     * @return array
      * @throws MigrationException
      */
-    protected function prepareValues(array $values = []): array
+    protected function makeValues(array $values = []): array
     {
+        if (empty($values['title'])) {
+            $values['title'] = Locale::getMessage('CFG_TITLE');
+        }
+
         if (empty($values['migration_extend_class'])) {
             $values['migration_extend_class'] = 'Version';
         }
@@ -221,10 +186,8 @@ class VersionConfig
 
         if (!is_dir($values['migration_dir'])) {
             Module::createDir($values['migration_dir']);
-            $values['migration_dir'] = realpath($values['migration_dir']);
-        } else {
-            $values['migration_dir'] = realpath($values['migration_dir']);
         }
+        $values['migration_dir'] = realpath($values['migration_dir']);
 
         if (empty($values['exchange_dir'])) {
             $values['exchange_dir'] = $values['migration_dir'];
@@ -253,16 +216,12 @@ class VersionConfig
 
         $cond1 = isset($values['console_user']);
         $cond2 = ($cond1 && $values['console_user'] === false);
-        $cond3 = ($cond1 && strpos($values['console_user'], 'login:') === 0);
+        $cond3 = ($cond1 && str_starts_with($values['console_user'], 'login:'));
 
         $values['console_user'] = ($cond2 || $cond3) ? $values['console_user'] : 'admin';
 
-        if (empty($values['version_builders']) || !is_array($values['version_builders'])) {
+        if (!isset($values['version_builders']) || !is_array($values['version_builders'])) {
             $values['version_builders'] = VersionConfig::getDefaultBuilders();
-        }
-
-        if (empty($values['tracker_task_url'])) {
-            $values['tracker_task_url'] = '';
         }
 
         if (empty($values['version_name_template'])) {
@@ -270,8 +229,8 @@ class VersionConfig
         }
 
         if (
-            (strpos($values['version_name_template'], '#TIMESTAMP#') === false)
-            || (strpos($values['version_name_template'], '#NAME#') === false)
+            (!str_contains($values['version_name_template'], '#TIMESTAMP#'))
+            || (!str_contains($values['version_name_template'], '#NAME#'))
         ) {
             throw new MigrationException("Config version_name_template format error");
         }
@@ -292,105 +251,6 @@ class VersionConfig
         return $values;
     }
 
-    public function humanValues(array $values = []): array
-    {
-        foreach ($values as $key => $val) {
-            if ($val === true || $val === false) {
-                $val = ($val) ? 'yes' : 'no';
-                $val = Locale::getMessage('CONFIG_' . $val);
-            } elseif (is_array($val)) {
-                $fres = [];
-                foreach ($val as $fkey => $fval) {
-                    $fres[] = '[' . $fkey . '] => ' . $fval;
-                }
-                $val = implode(PHP_EOL, $fres);
-            }
-            $values[$key] = (string)$val;
-        }
-        return $values;
-    }
-
-    /**
-     * @param string $name
-     * @param string $default
-     *
-     * @return bool|mixed|string
-     */
-    public function getVal($name, $default = '')
-    {
-        $values = $this->configList[$this->configCurrent]['values'];
-
-        if (isset($values[$name])) {
-            if (is_bool($values[$name])) {
-                return $values[$name];
-            } elseif (!empty($values[$name])) {
-                return $values[$name];
-            }
-        }
-
-        return $default;
-    }
-
-    public function createConfig(string $configName): bool
-    {
-        $fileName = 'migrations.' . $configName . '.php';
-        if (!$this->getConfigName($fileName)) {
-            return false;
-        }
-
-        $configPath = Module::getPhpInterfaceDir() . '/' . $fileName;
-        if (is_file($configPath)) {
-            return false;
-        }
-
-        $configValues = [
-            'migration_dir' => Module::getPhpInterfaceDir(false) . '/migrations.' . $configName,
-            'migration_table' => 'sprint_migration_' . $configName,
-        ];
-
-        file_put_contents($configPath, '<?php return ' . var_export($configValues, 1) . ';');
-        return is_file($configPath);
-    }
-
-    /**
-     * @throws MigrationException
-     */
-    public function deleteConfig(string $configName): bool
-    {
-        $fileName = 'migrations.' . $configName . '.php';
-        if (!$this->getConfigName($fileName)) {
-            return false;
-        }
-
-        if (!isset($this->configList[$configName])) {
-            return false;
-        }
-
-        $configFile = $this->configList[$configName]['file'];
-
-        $vmFrom = new VersionManager(
-            new VersionConfig($configName)
-        );
-        $vmFrom->clean();
-
-        if (!empty($configFile) && is_file($configFile)) {
-            unlink($configFile);
-        }
-
-        return true;
-    }
-
-    protected function getSort(string $configName): int
-    {
-        if ($configName == VersionEnum::CONFIG_ARCHIVE) {
-            return 110;
-        } elseif ($configName == VersionEnum::CONFIG_DEFAULT) {
-            return 100;
-        } else {
-            return 500;
-        }
-    }
-
     /**
      * Метод должен быть публичным для работы со сторонним кодом
      *
@@ -399,29 +259,28 @@ class VersionConfig
     public static function getDefaultBuilders(): array
     {
         return [
-            'UserGroupBuilder' => UserGroupBuilder::class,
-            'IblockBuilder' => IblockBuilder::class,
-            'IblockPropertyBuilder' => IblockPropertyBuilder::class,
-            'IblockCategoryBuilder' => IblockCategoryBuilder::class,
-            'IblockElementsBuilder' => IblockElementsBuilder::class,
-            'IblockDeleteBuilder' => IblockDeleteBuilder::class,
-            'HlblockBuilder' => HlblockBuilder::class,
-            'HlblockElementsBuilder' => HlblockElementsBuilder::class,
+            'UserGroupBuilder'        => UserGroupBuilder::class,
+            'IblockBuilder'           => IblockBuilder::class,
+            'IblockPropertyBuilder'   => IblockPropertyBuilder::class,
+            'IblockCategoryBuilder'   => IblockCategoryBuilder::class,
+            'IblockElementsBuilder'   => IblockElementsBuilder::class,
+            'IblockDeleteBuilder'     => IblockDeleteBuilder::class,
+            'HlblockBuilder'          => HlblockBuilder::class,
+            'HlblockElementsBuilder'  => HlblockElementsBuilder::class,
             'UserTypeEntitiesBuilder' => UserTypeEntitiesBuilder::class,
-            'OrderPropertiesBuilder' => OrderPropertiesBuilder::class,
-            'AgentBuilder' => AgentBuilder::class,
-            'OptionBuilder' => OptionBuilder::class,
-            'FormBuilder' => FormBuilder::class,
-            'EventBuilder' => EventBuilder::class,
-            'UserOptionsBuilder' => UserOptionsBuilder::class,
+            'AgentBuilder'            => AgentBuilder::class,
+            'OptionBuilder'           => OptionBuilder::class,
+            'FormBuilder'             => FormBuilder::class,
+            'EventBuilder'            => EventBuilder::class,
+            'UserOptionsBuilder'      => UserOptionsBuilder::class,
+            'OrderPropertiesBuilder'  => OrderPropertiesBuilder::class,
             'MedialibElementsBuilder' => MedialibElementsBuilder::class,
-            'BlankBuilder' => BlankBuilder::class,
-            'CacheCleanerBuilder' => CacheCleanerBuilder::class,
-            'MarkerBuilder' => MarkerBuilder::class,
-            'TransferBuilder' => TransferBuilder::class,
+            'BlankBuilder'            => BlankBuilder::class,
+            'CacheCleanerBuilder'     => CacheCleanerBuilder::class,
+            'MarkerBuilder'           => MarkerBuilder::class,
+            'TransferBuilder'         => TransferBuilder::class,
         ];
     }
+
+
 }
-
-
-

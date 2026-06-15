@@ -17,8 +17,6 @@ if ($_POST["step_code"] == "migration_execute" && check_bitrix_sessid()) {
     $logger = Output::getInstance();
 
     $versionName = !empty($_POST['version']) ? (string)$_POST['version'] : '';
-    $versionConfig->tryVersionName($versionName);
-
     $params = !empty($_POST['params']) ? $_POST['params'] : [];
     $restart = !empty($_POST['restart']) ? 1 : 0;
 
@@ -54,6 +52,8 @@ if ($_POST["step_code"] == "migration_execute" && check_bitrix_sessid()) {
     }
 
     if ($versionName && $action) {
+        $versionConfig->tryVersionName($versionName);
+
         if (!$restart) {
             $logger->outInfo('%s (%s) start', $versionName, $action);
         }

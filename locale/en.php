@@ -95,7 +95,6 @@
         "CONFIG_no"                          => "no",
         "CONFIG_version_name_template"       => "Version name template",
         "CONFIG_version_timestamp_format"    => "Timestamp format for creating migration file",
-        "CONFIG_version_timestamp_pattern"   => "Timestamp pattern for search migration files by timestamp format",
         "CONFIG_migration_hash_algo"         => "Hash algorithm for checking changes in the migration file",
     ]
 );

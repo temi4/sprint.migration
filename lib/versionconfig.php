@@ -235,13 +235,13 @@ class VersionConfig
             throw new MigrationException("Config version_name_template format error");
         }
 
-        if (empty($values['version_timestamp_pattern'])) {
-            $values['version_timestamp_pattern'] = '/20\d{12}/';
-        }
-
         if (empty($values['version_timestamp_format'])) {
             $values['version_timestamp_format'] = 'YmdHis';
         }
+
+        $values['version_timestamp_pattern'] = $this->maskToRegex(
+            $values['version_timestamp_format']
+        );
 
         if (empty($values['migration_hash_algo'])) {
             $values['migration_hash_algo'] = 'md5';
@@ -280,6 +280,27 @@ class VersionConfig
             'MarkerBuilder'           => MarkerBuilder::class,
             'TransferBuilder'         => TransferBuilder::class,
         ];
+    }
+
+    /**
+     * @throws MigrationException
+     */
+    private function maskToRegex(string $mask): string
+    {
+        $supportedFormats = [
+            'YmdHis'    => '/20\d{12}/',
+            'Ymd_His'   => '/20\d{6}_\d{6}/',
+            'Y_m_d_His' => '/20\d{2}_\d{2}_\d{2}_\d{6}/',
+            'dmYHis'    => '/\d{2}\d{2}20\d{2}\d{6}/',
+            'dmY_His'   => '/\d{2}\d{2}20\d{2}_\d{6}/',
+            'd_m_Y_His' => '/\d{2}_\d{2}_20\d{2}_\d{6}/',
+        ];
+
+        if (isset($supportedFormats[$mask])) {
+            return $supportedFormats[$mask];
+        }
+
+        throw new MigrationException("Config version_timestamp_format has unsupported format");
     }
 
 

@@ -95,7 +95,6 @@
         "CONFIG_no"                          => "нет",
         "CONFIG_version_name_template"       => "Шаблон названия миграции",
         "CONFIG_version_timestamp_format"    => "Формат даты для создания файла миграции",
-        "CONFIG_version_timestamp_pattern"   => "Регулярное выражение для поиска миграций по формату даты",
         "CONFIG_migration_hash_algo"         => "Алгоритм подсчета хеша для проверки изменений в файле миграции",
     ]
 );

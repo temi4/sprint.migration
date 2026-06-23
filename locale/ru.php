@@ -253,6 +253,10 @@
         "BUILDER_FormExport_Fields"        => "Поля формы",
         "BUILDER_FormExport_Statuses"      => "Статусы",
         "BUILDER_FormExport_SelectFields"  => "Выберите поля формы",
+        "BUILDER_VoteExport1"              => "Создать миграцию для опроса",
+        "BUILDER_VoteExport_VoteId"        => "Выберите опрос",
+        "BUILDER_VoteExport_Info"          => "У опроса должен быть заполнен Символьный идентификатор и создан хотя бы один Список опросов",
+        "BUILDER_VoteExport_UnknownChannel" => "Неизвестный канал",
         "BUILDER_OptionExport1"            => "Создать миграцию для настроек модулей",
         "BUILDER_OptionExport_module_id"   => "Выберите модули",
         "BUILDER_CacheCleaner1"            => "Очистка кеша",
@@ -479,6 +483,7 @@
         "BUILDER_GROUP_Hlblock"  => "Highload-блоки",
         "BUILDER_GROUP_Sale"     => "Интернет-магазин",
         "BUILDER_GROUP_Form"     => "Веб-формы",
+        "BUILDER_GROUP_Vote"     => "Опросы",
         "BUILDER_GROUP_Medialib" => "Медиабиблиотека",
         "BUILDER_GROUP_Tools"    => "Инструменты",
     ]

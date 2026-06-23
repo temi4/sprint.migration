@@ -22,6 +22,7 @@ use Sprint\Migration\Builders\TransferBuilder;
 use Sprint\Migration\Builders\UserGroupBuilder;
 use Sprint\Migration\Builders\UserOptionsBuilder;
 use Sprint\Migration\Builders\UserTypeEntitiesBuilder;
+use Sprint\Migration\Builders\VoteBuilder;
 use Sprint\Migration\Enum\VersionEnum;
 use Sprint\Migration\Exceptions\MigrationException;
 
@@ -271,6 +272,7 @@ class VersionConfig
             'AgentBuilder'            => AgentBuilder::class,
             'OptionBuilder'           => OptionBuilder::class,
             'FormBuilder'             => FormBuilder::class,
+            'VoteBuilder'             => VoteBuilder::class,
             'EventBuilder'            => EventBuilder::class,
             'UserOptionsBuilder'      => UserOptionsBuilder::class,
             'OrderPropertiesBuilder'  => OrderPropertiesBuilder::class,

@@ -16,6 +16,7 @@ use Sprint\Migration\Helpers\MedialibExchangeHelper;
 use Sprint\Migration\Helpers\MedialibHelper;
 use Sprint\Migration\Helpers\OptionHelper;
 use Sprint\Migration\Helpers\OrderPropertiesHelper;
+use Sprint\Migration\Helpers\SaleDiscountHelper;
 use Sprint\Migration\Helpers\SiteHelper;
 use Sprint\Migration\Helpers\SqlHelper;
 use Sprint\Migration\Helpers\TaskHelper;
@@ -42,6 +43,7 @@ use Sprint\Migration\Helpers\VoteHelper;
  * @method FormHelper               Form()
  * @method VoteHelper               Vote()
  * @method DeliveryServiceHelper    DeliveryService()
+ * @method SaleDiscountHelper       SaleDiscount()
  * @method SqlHelper                Sql()
  * @method MedialibHelper           Medialib()
  * @method TextHelper               Text()

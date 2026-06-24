@@ -73,6 +73,7 @@
         "WRITE_UP_CODE"            => "Укажите код установки миграции в методе up()",
         "WRITE_DOWN_CODE"          => "Укажите код отката миграции в методе down()",
         "LOADING_TEXT"             => "Загрузка...",
+        "SALE_DISCOUNT_UPDATED"    => "Правило корзины #NAME# сохранено",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(
@@ -241,6 +242,8 @@
         "BUILDER_OrderProperties_MigratePropertyVariants"     => "Перенести значения свойств (для свойств типа Перечисление [ENUM])",
         "BUILDER_OrderProperties_MigratePropertyVariants_No"  => "Не переносить",
         "BUILDER_OrderProperties_MigratePropertyVariants_Yes" => "Переносить",
+        "BUILDER_SaleDiscount"                                => "Создать миграцию для правил корзины",
+        "BUILDER_SaleDiscount_Discounts"                      => "Выберите правила корзины",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(

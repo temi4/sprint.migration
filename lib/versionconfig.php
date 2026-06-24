@@ -18,6 +18,7 @@ use Sprint\Migration\Builders\MarkerBuilder;
 use Sprint\Migration\Builders\MedialibElementsBuilder;
 use Sprint\Migration\Builders\OptionBuilder;
 use Sprint\Migration\Builders\OrderPropertiesBuilder;
+use Sprint\Migration\Builders\SaleDiscountBuilder;
 use Sprint\Migration\Builders\TransferBuilder;
 use Sprint\Migration\Builders\UserGroupBuilder;
 use Sprint\Migration\Builders\UserOptionsBuilder;
@@ -276,6 +277,7 @@ class VersionConfig
             'EventBuilder'            => EventBuilder::class,
             'UserOptionsBuilder'      => UserOptionsBuilder::class,
             'OrderPropertiesBuilder'  => OrderPropertiesBuilder::class,
+            'SaleDiscountBuilder'     => SaleDiscountBuilder::class,
             'MedialibElementsBuilder' => MedialibElementsBuilder::class,
             'BlankBuilder'            => BlankBuilder::class,
             'CacheCleanerBuilder'     => CacheCleanerBuilder::class,

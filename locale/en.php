@@ -73,6 +73,7 @@
         "WRITE_UP_CODE"            => "Write migration code in method up()",
         "WRITE_DOWN_CODE"          => "Write migration code in method down()",
         "LOADING_TEXT"             => "Loading...",
+        "SALE_DISCOUNT_UPDATED"    => "Cart rule #NAME# saved",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(
@@ -244,6 +245,8 @@
         "BUILDER_OrderProperties_MigratePropertyVariants"     => "Transfer property values (for properties of type Enumeration [ENUM])",
         "BUILDER_OrderProperties_MigratePropertyVariants_No"  => "Do not transfer",
         "BUILDER_OrderProperties_MigratePropertyVariants_Yes" => "Transfer",
+        "BUILDER_SaleDiscount"                                => "Create a migration for cart rules",
+        "BUILDER_SaleDiscount_Discounts"                      => "Select cart rules",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(

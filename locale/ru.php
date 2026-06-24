@@ -73,6 +73,7 @@
         "WRITE_UP_CODE"            => "Укажите код установки миграции в методе up()",
         "WRITE_DOWN_CODE"          => "Укажите код отката миграции в методе down()",
         "LOADING_TEXT"             => "Загрузка...",
+        "SUBSCRIBE_RUBRIC_UPDATED" => "Рубрика подписки #NAME# сохранена",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(
@@ -110,6 +111,9 @@
         "BUILDER_TransferSelect"             => "Выбрать миграции",
         "BUILDER_EventExport1"               => "Создать миграцию для почтовых событий",
         "BUILDER_EventExport_event_types"    => "Выберите типы почтовых событий",
+        "BUILDER_SubscribeExport1"           => "Создать миграцию для рубрик подписок",
+        "BUILDER_SubscribeExport_rubric_ids" => "Выберите рубрики подписок",
+        "BUILDER_SubscribeExport_Info"       => "У подписки должен быть заполнен Символьный код",
         "BUILDER_AgentExport1"               => "Создать миграцию для агентов",
         "BUILDER_AgentExport2"               => "Задайте модуль и функцию агента (MODULE_ID, NAME), чтобы увидеть его в списке",
         "BUILDER_AgentExport_agent_id"       => "Выберите агенты",
@@ -479,6 +483,7 @@
         "BUILDER_GROUP_Hlblock"  => "Highload-блоки",
         "BUILDER_GROUP_Sale"     => "Интернет-магазин",
         "BUILDER_GROUP_Form"     => "Веб-формы",
+        "BUILDER_GROUP_Subscribe" => "Подписки",
         "BUILDER_GROUP_Medialib" => "Медиабиблиотека",
         "BUILDER_GROUP_Tools"    => "Инструменты",
     ]

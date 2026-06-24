@@ -73,6 +73,7 @@
         "WRITE_UP_CODE"            => "Write migration code in method up()",
         "WRITE_DOWN_CODE"          => "Write migration code in method down()",
         "LOADING_TEXT"             => "Loading...",
+        "SUBSCRIBE_RUBRIC_UPDATED" => "Subscription rubric #NAME# saved",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(
@@ -110,6 +111,9 @@
         "BUILDER_TransferSelect"             => "Select migrations",
         "BUILDER_EventExport1"               => "Create migration for event types",
         "BUILDER_EventExport_event_types"    => "Select event types",
+        "BUILDER_SubscribeExport1"           => "Create migration for subscription rubrics",
+        "BUILDER_SubscribeExport_rubric_ids" => "Select subscription rubrics",
+        "BUILDER_SubscribeExport_Info"       => "Subscription rubric must have a symbolic code filled in",
         "BUILDER_AgentExport1"               => "Create migration for agents",
         "BUILDER_AgentExport2"               => "Set agent module and name (MODULE_ID, NAME), to see it in the list",
         "BUILDER_AgentExport_agent_id"       => "Select agents",
@@ -481,6 +485,7 @@
         "BUILDER_GROUP_Hlblock"  => "Highload information blocks",
         "BUILDER_GROUP_Sale"     => "Sale module",
         "BUILDER_GROUP_Form"     => "Web Forms",
+        "BUILDER_GROUP_Subscribe" => "Subscriptions",
         "BUILDER_GROUP_Medialib" => "Media Library",
         "BUILDER_GROUP_Tools"    => "Tools",
     ]

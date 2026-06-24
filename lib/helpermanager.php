@@ -18,6 +18,7 @@ use Sprint\Migration\Helpers\OptionHelper;
 use Sprint\Migration\Helpers\OrderPropertiesHelper;
 use Sprint\Migration\Helpers\SiteHelper;
 use Sprint\Migration\Helpers\SqlHelper;
+use Sprint\Migration\Helpers\SubscribeHelper;
 use Sprint\Migration\Helpers\TaskHelper;
 use Sprint\Migration\Helpers\TextHelper;
 use Sprint\Migration\Helpers\UserGroupHelper;
@@ -41,6 +42,7 @@ use Sprint\Migration\Helpers\UserTypeEntityHelper;
  * @method FormHelper               Form()
  * @method DeliveryServiceHelper    DeliveryService()
  * @method SqlHelper                Sql()
+ * @method SubscribeHelper          Subscribe()
  * @method MedialibHelper           Medialib()
  * @method TextHelper               Text()
  * @method IblockExchangeHelper     IblockExchange()

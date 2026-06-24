@@ -256,6 +256,10 @@
         "BUILDER_FormExport_Fields"        => "Form fields",
         "BUILDER_FormExport_Statuses"      => "Form statuses",
         "BUILDER_FormExport_SelectFields"  => "Select form fields",
+        "BUILDER_VoteExport1"              => "Create migration for poll",
+        "BUILDER_VoteExport_VoteId"        => "Select poll",
+        "BUILDER_VoteExport_Info"          => "Poll must have a symbolic identifier filled in and at least one poll list created",
+        "BUILDER_VoteExport_UnknownChannel" => "Unknown channel",
         "BUILDER_OptionExport1"            => "Create migration for module options",
         "BUILDER_OptionExport_module_id"   => "Select modules",
         "BUILDER_CacheCleaner1"            => "Cache clean",
@@ -481,6 +485,7 @@
         "BUILDER_GROUP_Hlblock"  => "Highload information blocks",
         "BUILDER_GROUP_Sale"     => "Sale module",
         "BUILDER_GROUP_Form"     => "Web Forms",
+        "BUILDER_GROUP_Vote"     => "Polls",
         "BUILDER_GROUP_Medialib" => "Media Library",
         "BUILDER_GROUP_Tools"    => "Tools",
     ]

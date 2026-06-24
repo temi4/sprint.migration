@@ -24,6 +24,7 @@ use Sprint\Migration\Helpers\UserGroupHelper;
 use Sprint\Migration\Helpers\UserHelper;
 use Sprint\Migration\Helpers\UserOptionsHelper;
 use Sprint\Migration\Helpers\UserTypeEntityHelper;
+use Sprint\Migration\Helpers\VoteHelper;
 
 /**
  * @method IblockHelper             Iblock()
@@ -39,6 +40,7 @@ use Sprint\Migration\Helpers\UserTypeEntityHelper;
  * @method TaskHelper               Task()
  * @method OptionHelper             Option()
  * @method FormHelper               Form()
+ * @method VoteHelper               Vote()
  * @method DeliveryServiceHelper    DeliveryService()
  * @method SqlHelper                Sql()
  * @method MedialibHelper           Medialib()

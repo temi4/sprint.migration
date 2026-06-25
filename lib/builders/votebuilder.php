@@ -18,9 +18,18 @@ class VoteBuilder extends VersionBuilder
 
     protected function initialize()
     {
-        $this->setTitle(Locale::getMessage('BUILDER_VoteExport1'));
         $this->setGroup(Locale::getMessage('BUILDER_GROUP_Vote'));
-        $this->setDescription(Locale::getMessage('BUILDER_VoteExport_Info'));
+
+        $this->setTitle(implode(' ', [
+            Locale::getMessage('BUILDER_VoteExport1'),
+            Locale::getMessage('DEVELOPER_LABEL'),
+        ]));
+
+        $this->setDescription(implode(PHP_EOL, [
+            Locale::getMessage('DEVELOPER_NAME', ['#VALUE#' => '@temi4']),
+            Locale::getMessage('DEVELOPER_URI', ['#VALUE#' => 'https://github.com/andreyryabin/sprint.migration/pull/179']),
+            Locale::getMessage('BUILDER_VoteExport_Info')
+        ]));
 
         $this->addVersionFields();
     }
@@ -49,8 +58,8 @@ class VoteBuilder extends VersionBuilder
         $this->createVersionFile(
             Module::getModuleTemplateFile('VoteExport'),
             [
-                'channel' => $channel,
-                'vote' => $vote,
+                'channel'   => $channel,
+                'vote'      => $vote,
                 'questions' => $questions,
             ]
         );

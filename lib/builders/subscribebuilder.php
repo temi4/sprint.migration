@@ -9,25 +9,26 @@ use Sprint\Migration\Locale;
 use Sprint\Migration\Module;
 use Sprint\Migration\VersionBuilder;
 
-class SaleDiscountBuilder extends VersionBuilder
+class SubscribeBuilder extends VersionBuilder
 {
-    protected function isBuilderEnabled(): bool
+    protected function isBuilderEnabled()
     {
-        return $this->getHelperManager()->SaleDiscount()->isEnabled();
+        return $this->getHelperManager()->Subscribe()->isEnabled();
     }
 
     protected function initialize()
     {
-        $this->setGroup(Locale::getMessage('BUILDER_GROUP_Sale'));
+        $this->setGroup(Locale::getMessage('BUILDER_GROUP_Subscribe'));
 
         $this->setTitle(implode(' ', [
-            Locale::getMessage('BUILDER_SaleDiscount'),
+            Locale::getMessage('BUILDER_SubscribeExport1'),
             Locale::getMessage('DEVELOPER_LABEL'),
         ]));
 
         $this->setDescription(implode(PHP_EOL, [
             Locale::getMessage('DEVELOPER_NAME', ['#VALUE#' => '@temi4']),
-            Locale::getMessage('DEVELOPER_URI', ['#VALUE#' => 'https://github.com/andreyryabin/sprint.migration/pull/181']),
+            Locale::getMessage('DEVELOPER_URI', ['#VALUE#' => 'https://github.com/andreyryabin/sprint.migration/pull/180']),
+            Locale::getMessage('BUILDER_SubscribeExport_Info')
         ]));
 
         $this->addVersionFields();
@@ -38,39 +39,40 @@ class SaleDiscountBuilder extends VersionBuilder
      * @throws RebuildException
      * @throws HelperException
      */
-    protected function execute(): void
+    protected function execute()
     {
         $helper = $this->getHelperManager();
 
-        $discountIds = $this->addFieldAndReturn('discounts', [
-            'title'    => Locale::getMessage('BUILDER_SaleDiscount_Discounts'),
+        $rubricIds = $this->addFieldAndReturn('rubric_ids', [
+            'title'    => Locale::getMessage('BUILDER_SubscribeExport_rubric_ids'),
             'width'    => 350,
             'multiple' => 1,
             'value'    => [],
-            'items'    => $this->getDiscountsSelect(),
+            'items'    => $this->getRubricsSelect(),
         ]);
 
-        $items = $helper->SaleDiscount()->exportDiscounts($discountIds);
+        $items = $helper->Subscribe()->exportRubrics($rubricIds);
 
         if (empty($items)) {
-            $this->rebuildField('discounts');
+            $this->rebuildField('rubric_ids');
         }
 
         $this->createVersionFile(
-            Module::getModuleTemplateFile('SaleDiscountExport'),
+            Module::getModuleTemplateFile('SubscribeExport'),
             [
                 'items' => $items,
             ]
         );
     }
 
-    protected function getDiscountsSelect(): array
+    protected function getRubricsSelect(): array
     {
-        $items = $this->getHelperManager()->SaleDiscount()->getDiscounts();
-        $items = $this->getHelperManager()->SaleDiscount()->ensureDiscountXmlIds($items);
+        $items = $this->getHelperManager()->Subscribe()->getRubrics();
+
+        $items = array_filter($items, fn($item) => !empty($item['CODE']));
 
         $items = array_map(function ($item) {
-            $item['TITLE'] = '[' . $item['XML_ID'] . '] ' . $item['NAME'];
+            $item['TITLE'] = '[' . $item['CODE'] . '] ' . $item['NAME'];
             return $item;
         }, $items);
 

@@ -19,6 +19,7 @@ use Sprint\Migration\Helpers\OrderPropertiesHelper;
 use Sprint\Migration\Helpers\SaleDiscountHelper;
 use Sprint\Migration\Helpers\SiteHelper;
 use Sprint\Migration\Helpers\SqlHelper;
+use Sprint\Migration\Helpers\SubscribeHelper;
 use Sprint\Migration\Helpers\TaskHelper;
 use Sprint\Migration\Helpers\TextHelper;
 use Sprint\Migration\Helpers\UserGroupHelper;
@@ -45,6 +46,7 @@ use Sprint\Migration\Helpers\VoteHelper;
  * @method DeliveryServiceHelper    DeliveryService()
  * @method SaleDiscountHelper       SaleDiscount()
  * @method SqlHelper                Sql()
+ * @method SubscribeHelper          Subscribe()
  * @method MedialibHelper           Medialib()
  * @method TextHelper               Text()
  * @method IblockExchangeHelper     IblockExchange()

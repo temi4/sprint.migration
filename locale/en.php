@@ -100,6 +100,7 @@
         "CONFIG_no"                          => "no",
         "CONFIG_version_name_template"       => "Version name template",
         "CONFIG_version_timestamp_format"    => "Timestamp format for creating migration file",
+        "CONFIG_version_timestamp_pattern"   => "Timestamp pattern for search migration files by timestamp format",
         "CONFIG_migration_hash_algo"         => "Hash algorithm for checking changes in the migration file",
     ]
 );
@@ -271,7 +272,9 @@
         "BUILDER_VoteExport_Info"           => "Poll must have a symbolic identifier filled in and at least one poll list created",
         "BUILDER_VoteExport_UnknownChannel" => "Unknown channel",
         "BUILDER_OptionExport1"             => "Create migration for module options",
+        "BUILDER_OptionExport_Info"         => "Export module options, for each site",
         "BUILDER_OptionExport_module_id"    => "Select modules",
+        "BUILDER_OptionExport_site_id"      => "Select sites",
         "BUILDER_CacheCleaner1"             => "Cache clean",
         "BUILDER_CacheCleaner2"             => "Execute BXClearCache(true)",
         "BUILDER_Configurator"              => "Create configuration",

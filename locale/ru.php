@@ -100,6 +100,7 @@
         "CONFIG_no"                          => "нет",
         "CONFIG_version_name_template"       => "Шаблон названия миграции",
         "CONFIG_version_timestamp_format"    => "Формат даты для создания файла миграции",
+        "CONFIG_version_timestamp_pattern"   => "Регулярное выражение для поиска миграций по формату даты",
         "CONFIG_migration_hash_algo"         => "Алгоритм подсчета хеша для проверки изменений в файле миграции",
     ]
 );
@@ -268,7 +269,9 @@
         "BUILDER_VoteExport_Info"           => "У опроса должен быть заполнен Символьный идентификатор и создан хотя бы один Список опросов",
         "BUILDER_VoteExport_UnknownChannel" => "Неизвестный канал",
         "BUILDER_OptionExport1"             => "Создать миграцию для настроек модулей",
+        "BUILDER_OptionExport_Info"         => "Переносит настройки модулей для выбранных сайтов или сайта по умолчанию, если не выбирать.",
         "BUILDER_OptionExport_module_id"    => "Выберите модули",
+        "BUILDER_OptionExport_site_id"      => "Выберите сайты",
         "BUILDER_CacheCleaner1"             => "Очистка кеша",
         "BUILDER_CacheCleaner2"             => "Выполнить BXClearCache(true)",
         "BUILDER_Configurator"              => "Создать конфигурацию",

@@ -42,19 +42,25 @@ class OptionHelper extends Helper
     {
         $this->checkRequiredKeys($filter, ['MODULE_ID']);
 
-        try {
-            $values = Option::getForModule($filter['MODULE_ID']);
-        } catch (Exception) {
-            $values = [];
-        }
+        $sites = (array)($filter['SITE_ID'] ?? [false]);
 
         $result = [];
-        foreach ($values as $optionName => $value) {
-            $result[] = $this->prepareOption([
-                'MODULE_ID' => $filter['MODULE_ID'],
-                'NAME'      => $optionName,
-                'VALUE'     => $value,
-            ]);
+
+        foreach ($sites as $siteId) {
+            try {
+                $options = Option::getForModule($filter['MODULE_ID'], $siteId);
+            } catch (Exception $e) {
+                throw new HelperException($e->getMessage());
+            }
+
+            foreach ($options as $optionName => $optionValue) {
+                $result[] = $this->prepareOption([
+                    'MODULE_ID' => $filter['MODULE_ID'],
+                    'NAME'      => $optionName,
+                    'VALUE'     => $optionValue,
+                    'SITE_ID'   => $siteId
+                ]);
+            }
         }
 
         return $result;
@@ -68,12 +74,20 @@ class OptionHelper extends Helper
         $this->checkRequiredKeys($filter, ['MODULE_ID', 'NAME']);
 
         try {
-            $value = Option::get($filter['MODULE_ID'], $filter['NAME']);
+            $value = Option::get(
+                $filter['MODULE_ID'],
+                $filter['NAME'],
+                $filter['DEFAULT_VALUE'] ?? '',
+                $filter['SITE_ID'] ?? false
+            );
+
             return $this->prepareOption([
                 'MODULE_ID' => $filter['MODULE_ID'],
                 'NAME'      => $filter['NAME'],
                 'VALUE'     => $value,
+                'SITE_ID'   => $filter['SITE_ID'],
             ]);
+
         } catch (Exception $e) {
             throw new HelperException($e->getMessage(), $e->getCode(), $e);
         }
@@ -87,8 +101,11 @@ class OptionHelper extends Helper
         $this->checkRequiredKeys($fields, ['MODULE_ID', 'NAME']);
 
         $exists = $this->getOption([
-            'MODULE_ID' => $fields['MODULE_ID'],
-            'NAME'      => $fields['NAME'],
+            'MODULE_ID'     => $fields['MODULE_ID'],
+            'NAME'          => $fields['NAME'],
+            'VALUE'         => $fields['VALUE'] ?? '',
+            'DEFAULT_VALUE' => $fields['DEFAULT_VALUE'] ?? '',
+            'SITE_ID'       => $fields['SITE_ID'] ?? false,
         ]);
 
         if (empty($exists)) {
@@ -105,7 +122,7 @@ class OptionHelper extends Helper
     /**
      * @throws HelperException
      */
-    public function deleteOptions(array $filter = []): bool
+    public function deleteOptions(array $filter = []): void
     {
         $this->checkRequiredKeys($filter, ['MODULE_ID']);
 
@@ -115,25 +132,47 @@ class OptionHelper extends Helper
             $params['name'] = $filter['NAME'];
         }
 
-        try {
-            Option::delete($filter['MODULE_ID'], $params);
-            return true;
-        } catch (Exception) {
+        if (isset($filter['SITE_ID'])) {
+            $params['site_id'] = $filter['SITE_ID'];
         }
 
-        return false;
+        try {
+            Option::delete($filter['MODULE_ID'], $params);
+        } catch (Exception $e) {
+            throw new HelperException($e->getMessage());
+        }
     }
 
+    /**
+     * @throws HelperException
+     */
     protected function setOption(array $fields): bool
     {
         $fields = $this->revertOption($fields);
         try {
-            Option::set($fields['MODULE_ID'], $fields['NAME'], $fields['VALUE']);
-            $this->outNotice(Locale::getMessage('OPTION_UPDATED', ['#NAME#' => $fields['MODULE_ID'] . ':' . $fields['NAME']]));
+            Option::set(
+                $fields['MODULE_ID'],
+                $fields['NAME'],
+                $fields['VALUE'],
+                $fields['SITE_ID']
+            );
+
+            $optionName = implode(':', array_filter([
+                $fields['MODULE_ID'],
+                $fields['SITE_ID'],
+                $fields['NAME']
+            ]));
+
+
+            $this->outNotice(Locale::getMessage(
+                'OPTION_UPDATED',
+                ['#NAME#' => $optionName])
+            );
+
             return true;
-        } catch (Exception) {
+        } catch (Exception $e) {
+            throw new HelperException($e->getMessage());
         }
-        return false;
     }
 
     protected function prepareOption(array $item): array

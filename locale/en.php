@@ -511,10 +511,13 @@
 \Sprint\Migration\Locale::loadLocale(
     "en",
     [
-        "BUILDER_BlogExport1"          => "Export blog groups and blogs",
-        "BUILDER_BlogExport_Info"      => "Transfers blog groups and blog settings.",
-        "BUILDER_BlogExport_group_ids" => "Select blog groups",
-        "BUILDER_BlogExport_blog_ids"  => "Select blogs",
+        "BUILDER_BlogExport1"                               => "Export blog groups and blogs",
+        "BUILDER_BlogExport_Info"                           => "Transfers blog groups and blog settings.",
+        "BUILDER_BlogExport_group_ids"                      => "Select blog groups",
+        "BUILDER_BlogExport_blog_ids"                       => "Select blogs",
+        "BUILDER_BlogUserTypeEntitiesExport1"               => "Export blog custom fields",
+        "BUILDER_BlogUserTypeEntitiesExport_Info"           => "Transfers blog custom fields.",
+        "BUILDER_BlogUserTypeEntitiesExport_entity_fields" => "Select blog custom fields",
     ]
 );
 

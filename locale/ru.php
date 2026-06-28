@@ -509,10 +509,13 @@
 \Sprint\Migration\Locale::loadLocale(
     "ru",
     [
-        "BUILDER_BlogExport1"         => "Экспорт групп блогов и блогов",
-        "BUILDER_BlogExport_Info"     => "Переносит группы блогов и настройки блогов.",
-        "BUILDER_BlogExport_group_ids" => "Выберите группы блогов",
-        "BUILDER_BlogExport_blog_ids"  => "Выберите блоги",
+        "BUILDER_BlogExport1"                               => "Экспорт групп блогов и блогов",
+        "BUILDER_BlogExport_Info"                           => "Переносит группы блогов и настройки блогов.",
+        "BUILDER_BlogExport_group_ids"                      => "Выберите группы блогов",
+        "BUILDER_BlogExport_blog_ids"                       => "Выберите блоги",
+        "BUILDER_BlogUserTypeEntitiesExport1"               => "Экспорт пользовательских свойств блогов",
+        "BUILDER_BlogUserTypeEntitiesExport_Info"           => "Переносит пользовательские свойства блогов.",
+        "BUILDER_BlogUserTypeEntitiesExport_entity_fields" => "Выберите пользовательские свойства блогов",
     ]
 );
 

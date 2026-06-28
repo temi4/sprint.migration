@@ -3,6 +3,7 @@
 namespace Sprint\Migration;
 
 use Sprint\Migration\Builders\AgentBuilder;
+use Sprint\Migration\Builders\BlogBuilder;
 use Sprint\Migration\Builders\BlankBuilder;
 use Sprint\Migration\Builders\CacheCleanerBuilder;
 use Sprint\Migration\Builders\EventBuilder;
@@ -272,6 +273,7 @@ class VersionConfig
             'HlblockElementsBuilder'  => HlblockElementsBuilder::class,
             'UserTypeEntitiesBuilder' => UserTypeEntitiesBuilder::class,
             'AgentBuilder'            => AgentBuilder::class,
+            'BlogBuilder'             => BlogBuilder::class,
             'OptionBuilder'           => OptionBuilder::class,
             'FormBuilder'             => FormBuilder::class,
             'VoteBuilder'             => VoteBuilder::class,

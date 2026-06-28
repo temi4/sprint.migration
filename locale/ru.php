@@ -76,6 +76,8 @@
         "WRITE_UP_CODE"            => "Укажите код установки миграции в методе up()",
         "WRITE_DOWN_CODE"          => "Укажите код отката миграции в методе down()",
         "LOADING_TEXT"             => "Загрузка...",
+        "BLOG_GROUP_UPDATED"       => "Группа блогов #NAME# сохранена",
+        "BLOG_UPDATED"             => "Блог #NAME# сохранен",
         "SALE_DISCOUNT_UPDATED"    => "Правило корзины #NAME# сохранено",
         "SUBSCRIBE_RUBRIC_UPDATED" => "Рубрика подписки #NAME# сохранена",
     ]
@@ -492,6 +494,7 @@
     "ru",
     [
         "BUILDER_GROUP_Main"      => "Главный модуль",
+        "BUILDER_GROUP_Blog"      => "Блоги",
         "BUILDER_GROUP_Iblock"    => "Инфоблоки",
         "BUILDER_GROUP_Hlblock"   => "Highload-блоки",
         "BUILDER_GROUP_Sale"      => "Интернет-магазин",
@@ -500,6 +503,16 @@
         "BUILDER_GROUP_Vote"      => "Опросы",
         "BUILDER_GROUP_Medialib"  => "Медиабиблиотека",
         "BUILDER_GROUP_Tools"     => "Инструменты",
+    ]
+);
+
+\Sprint\Migration\Locale::loadLocale(
+    "ru",
+    [
+        "BUILDER_BlogExport1"         => "Экспорт групп блогов и блогов",
+        "BUILDER_BlogExport_Info"     => "Переносит группы блогов и настройки блогов. Посты, комментарии, изображения, подписки и участники внутренних групп блога не переносятся.",
+        "BUILDER_BlogExport_group_ids" => "Выберите группы блогов",
+        "BUILDER_BlogExport_blog_ids"  => "Выберите блоги",
     ]
 );
 

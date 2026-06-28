@@ -4,6 +4,7 @@ namespace Sprint\Migration;
 
 use Sprint\Migration\Builders\AgentBuilder;
 use Sprint\Migration\Builders\BlogBuilder;
+use Sprint\Migration\Builders\BlogPostBuilder;
 use Sprint\Migration\Builders\BlogUserTypeEntitiesBuilder;
 use Sprint\Migration\Builders\BlankBuilder;
 use Sprint\Migration\Builders\CacheCleanerBuilder;
@@ -275,6 +276,7 @@ class VersionConfig
             'UserTypeEntitiesBuilder' => UserTypeEntitiesBuilder::class,
             'AgentBuilder'            => AgentBuilder::class,
             'BlogBuilder'                 => BlogBuilder::class,
+            'BlogPostBuilder'             => BlogPostBuilder::class,
             'BlogUserTypeEntitiesBuilder' => BlogUserTypeEntitiesBuilder::class,
             'OptionBuilder'               => OptionBuilder::class,
             'FormBuilder'             => FormBuilder::class,

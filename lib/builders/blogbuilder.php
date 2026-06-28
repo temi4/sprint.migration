@@ -20,7 +20,10 @@ class BlogBuilder extends VersionBuilder
     {
         $this->setGroup(Locale::getMessage('BUILDER_GROUP_Blog'));
 
-        $this->setTitle(Locale::getMessage('BUILDER_BlogExport1'));
+        $this->setTitle(implode(' ', [
+            Locale::getMessage('BUILDER_BlogExport1'),
+            Locale::getMessage('DEVELOPER_LABEL'),
+        ]));
 
         $this->setDescription(implode(PHP_EOL, [
             Locale::getMessage('DEVELOPER_NAME', ['#VALUE#' => '@temi4']),

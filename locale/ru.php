@@ -78,6 +78,7 @@
         "LOADING_TEXT"             => "Загрузка...",
         "BLOG_GROUP_UPDATED"       => "Группа блогов #NAME# сохранена",
         "BLOG_UPDATED"             => "Блог #NAME# сохранен",
+        "BLOG_POST_UPDATED"        => "Запись блога #NAME# сохранена",
         "SALE_DISCOUNT_UPDATED"    => "Правило корзины #NAME# сохранено",
         "SUBSCRIBE_RUBRIC_UPDATED" => "Рубрика подписки #NAME# сохранена",
     ]
@@ -516,6 +517,14 @@
         "BUILDER_BlogUserTypeEntitiesExport1"               => "Экспорт пользовательских свойств блогов",
         "BUILDER_BlogUserTypeEntitiesExport_Info"           => "Переносит пользовательские свойства блогов.",
         "BUILDER_BlogUserTypeEntitiesExport_entity_fields" => "Выберите пользовательские свойства блогов",
+        "BUILDER_BlogPostExport1"                           => "Экспорт записей блога",
+        "BUILDER_BlogPostExport_Info"                       => "Переносит записи выбранного блога.",
+        "BUILDER_BlogPostExport_blog_id"                    => "Выберите блог",
+        "BUILDER_BlogPostExport_filter"                     => "Выберите записи",
+        "BUILDER_BlogPostExport_SelectSomeId"               => "Список ID",
+        "BUILDER_BlogPostExport_SelectSomeCode"             => "Список CODE",
+        "BUILDER_BlogPostExport_FilterListId"               => "Укажите ID записей через пробел",
+        "BUILDER_BlogPostExport_FilterListCode"             => "Укажите CODE записей через пробел",
     ]
 );
 

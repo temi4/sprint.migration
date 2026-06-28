@@ -19,7 +19,10 @@ class BlogUserTypeEntitiesBuilder extends VersionBuilder
     protected function initialize()
     {
         $this->setGroup(Locale::getMessage('BUILDER_GROUP_Blog'));
-        $this->setTitle(Locale::getMessage('BUILDER_BlogUserTypeEntitiesExport1'));
+        $this->setTitle(implode(' ', [
+            Locale::getMessage('BUILDER_BlogUserTypeEntitiesExport1'),
+            Locale::getMessage('DEVELOPER_LABEL'),
+        ]));
 
         $this->setDescription(implode(PHP_EOL, [
             Locale::getMessage('DEVELOPER_NAME', ['#VALUE#' => '@temi4']),

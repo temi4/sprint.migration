@@ -78,6 +78,7 @@
         "LOADING_TEXT"             => "Loading...",
         "BLOG_GROUP_UPDATED"       => "Blog group #NAME# saved",
         "BLOG_UPDATED"             => "Blog #NAME# saved",
+        "BLOG_POST_UPDATED"        => "Blog post #NAME# saved",
         "SALE_DISCOUNT_UPDATED"    => "Cart rule #NAME# saved",
         "SUBSCRIBE_RUBRIC_UPDATED" => "Subscription rubric #NAME# saved",
     ]
@@ -518,6 +519,14 @@
         "BUILDER_BlogUserTypeEntitiesExport1"               => "Export blog custom fields",
         "BUILDER_BlogUserTypeEntitiesExport_Info"           => "Transfers blog custom fields.",
         "BUILDER_BlogUserTypeEntitiesExport_entity_fields" => "Select blog custom fields",
+        "BUILDER_BlogPostExport1"                           => "Export blog posts",
+        "BUILDER_BlogPostExport_Info"                       => "Transfers selected blog posts.",
+        "BUILDER_BlogPostExport_blog_id"                    => "Select blog",
+        "BUILDER_BlogPostExport_filter"                     => "Select posts",
+        "BUILDER_BlogPostExport_SelectSomeId"               => "ID list",
+        "BUILDER_BlogPostExport_SelectSomeCode"             => "CODE list",
+        "BUILDER_BlogPostExport_FilterListId"               => "Enter post IDs separated by spaces",
+        "BUILDER_BlogPostExport_FilterListCode"             => "Enter post CODEs separated by spaces",
     ]
 );
 

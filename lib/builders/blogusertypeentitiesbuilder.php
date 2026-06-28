@@ -44,7 +44,7 @@ class BlogUserTypeEntitiesBuilder extends VersionBuilder
             'width'    => 350,
             'multiple' => 1,
             'value'    => [],
-            'items'    => $this->createSelect($fields, 'ID', 'FIELD_TITLE'),
+            'select'   => $this->createSelect($fields, 'ID', 'FIELD_TITLE'),
         ]);
 
         $entities = $helper->UserTypeEntity()->exportUserTypeEntitiesByIds($fieldIds);

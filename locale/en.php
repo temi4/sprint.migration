@@ -512,7 +512,7 @@
     "en",
     [
         "BUILDER_BlogExport1"          => "Export blog groups and blogs",
-        "BUILDER_BlogExport_Info"      => "Transfers blog groups and blog settings. Posts, comments, images, subscriptions, and blog user group members are not transferred.",
+        "BUILDER_BlogExport_Info"      => "Transfers blog groups and blog settings.",
         "BUILDER_BlogExport_group_ids" => "Select blog groups",
         "BUILDER_BlogExport_blog_ids"  => "Select blogs",
     ]

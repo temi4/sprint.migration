@@ -7,6 +7,7 @@ use Sprint\Migration\Builders\BlankBuilder;
 use Sprint\Migration\Builders\CacheCleanerBuilder;
 use Sprint\Migration\Builders\EventBuilder;
 use Sprint\Migration\Builders\FormBuilder;
+use Sprint\Migration\Builders\ForumBuilder;
 use Sprint\Migration\Builders\HlblockBuilder;
 use Sprint\Migration\Builders\HlblockElementsBuilder;
 use Sprint\Migration\Builders\IblockBuilder;
@@ -274,6 +275,7 @@ class VersionConfig
             'AgentBuilder'            => AgentBuilder::class,
             'OptionBuilder'           => OptionBuilder::class,
             'FormBuilder'             => FormBuilder::class,
+            'ForumBuilder'            => ForumBuilder::class,
             'VoteBuilder'             => VoteBuilder::class,
             'EventBuilder'            => EventBuilder::class,
             'SubscribeBuilder'        => SubscribeBuilder::class,

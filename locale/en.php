@@ -78,6 +78,8 @@
         "LOADING_TEXT"             => "Loading...",
         "SALE_DISCOUNT_UPDATED"    => "Cart rule #NAME# saved",
         "SUBSCRIBE_RUBRIC_UPDATED" => "Subscription rubric #NAME# saved",
+        "FORUM_GROUP_UPDATED"      => "Forum group #NAME# saved",
+        "FORUM_UPDATED"            => "Forum #NAME# saved",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(
@@ -116,6 +118,13 @@
         "BUILDER_TransferSelect"             => "Select migrations",
         "BUILDER_EventExport1"               => "Create migration for event types",
         "BUILDER_EventExport_event_types"    => "Select event types",
+        "BUILDER_ForumExport1"               => "Create migration for forums",
+        "BUILDER_ForumExport_group_ids"      => "Select forum groups",
+        "BUILDER_ForumExport_forum_ids"      => "Select forums",
+        "BUILDER_ForumExport_Info"           => "Forum group is exported with the forum automatically when it is set for the selected forum. If XML_ID is empty, it will be generated before export",
+        "BUILDER_ForumExport_RootGroups"     => "Root groups",
+        "BUILDER_ForumExport_NestedGroups"   => "Nested groups",
+        "BUILDER_ForumExport_WithoutGroup"   => "Without group",
         "BUILDER_SubscribeExport1"           => "Create migration for subscription rubrics",
         "BUILDER_SubscribeExport_rubric_ids" => "Select subscription rubrics",
         "BUILDER_SubscribeExport_Info"       => "Subscription rubric must have a symbolic code filled in",
@@ -498,6 +507,7 @@
         "BUILDER_GROUP_Hlblock"   => "Highload information blocks",
         "BUILDER_GROUP_Sale"      => "Sale module",
         "BUILDER_GROUP_Form"      => "Web Forms",
+        "BUILDER_GROUP_Forum"     => "Forums",
         "BUILDER_GROUP_Vote"      => "Polls",
         "BUILDER_GROUP_Subscribe" => "Subscriptions",
         "BUILDER_GROUP_Medialib"  => "Media Library",

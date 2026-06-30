@@ -184,6 +184,10 @@
         "BUILDER_IblockPropertyExport1"           => "Создать миграцию свойств инфоблоков",
         "BUILDER_IblockPropertyExport_UserType"   => "Выберите тип свойства",
         "BUILDER_IblockPropertyExport_Properties" => "Выберите свойства",
+        "BUILDER_IblockPropertyDelete"            => "Удалить свойства инфоблока",
+        "BUILDER_IblockPropertyDelete_Info"       => "Удаляет выбранные свойства и свойства с указанными CODE. Отсутствие свойства не считается ошибкой.",
+        "BUILDER_IblockPropertyDelete_Properties" => "Выберите свойства",
+        "BUILDER_IblockPropertyDelete_Codes"      => "Коды свойств для удаления",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(

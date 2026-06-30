@@ -186,6 +186,10 @@
         "BUILDER_IblockPropertyExport1"           => "Create migration for information block properties",
         "BUILDER_IblockPropertyExport_UserType"   => "Select property type",
         "BUILDER_IblockPropertyExport_Properties" => "Select properties",
+        "BUILDER_IblockPropertyDelete"            => "Delete information block properties",
+        "BUILDER_IblockPropertyDelete_Info"       => "Deletes selected properties and properties with specified CODE. Missing property is not an error.",
+        "BUILDER_IblockPropertyDelete_Properties" => "Select properties",
+        "BUILDER_IblockPropertyDelete_Codes"      => "Property codes to delete",
     ]
 );
 

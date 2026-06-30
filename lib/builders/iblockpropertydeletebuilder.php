@@ -60,7 +60,7 @@ class IblockPropertyDeleteBuilder extends VersionBuilder
                 'width'    => 350,
                 'multiple' => 1,
                 'value'    => [],
-                'items'    => $this->createSelect($properties, 'ID', 'PROPERTY_TITLE'),
+                'select'   => $this->createSelect($properties, 'ID', 'PROPERTY_TITLE'),
             ]
         );
 

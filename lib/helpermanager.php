@@ -7,6 +7,7 @@ use Sprint\Migration\Helpers\AgentHelper;
 use Sprint\Migration\helpers\DeliveryServiceHelper;
 use Sprint\Migration\Helpers\EventHelper;
 use Sprint\Migration\Helpers\FormHelper;
+use Sprint\Migration\Helpers\ForumHelper;
 use Sprint\Migration\Helpers\HlblockExchangeHelper;
 use Sprint\Migration\Helpers\HlblockHelper;
 use Sprint\Migration\Helpers\IblockExchangeHelper;
@@ -43,6 +44,7 @@ use Sprint\Migration\Helpers\CultureHelper;
  * @method TaskHelper               Task()
  * @method OptionHelper             Option()
  * @method FormHelper               Form()
+ * @method ForumHelper              Forum()
  * @method VoteHelper               Vote()
  * @method DeliveryServiceHelper    DeliveryService()
  * @method SaleDiscountHelper       SaleDiscount()

@@ -78,6 +78,8 @@
         "LOADING_TEXT"             => "Загрузка...",
         "SALE_DISCOUNT_UPDATED"    => "Правило корзины #NAME# сохранено",
         "SUBSCRIBE_RUBRIC_UPDATED" => "Рубрика подписки #NAME# сохранена",
+        "FORUM_GROUP_UPDATED"      => "Группа форумов #NAME# сохранена",
+        "FORUM_UPDATED"            => "Форум #NAME# сохранен",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(
@@ -116,6 +118,13 @@
         "BUILDER_TransferSelect"             => "Выбрать миграции",
         "BUILDER_EventExport1"               => "Создать миграцию для почтовых событий",
         "BUILDER_EventExport_event_types"    => "Выберите типы почтовых событий",
+        "BUILDER_ForumExport1"               => "Создать миграцию для форумов",
+        "BUILDER_ForumExport_group_ids"      => "Выберите группы форумов",
+        "BUILDER_ForumExport_forum_ids"      => "Выберите форумы",
+        "BUILDER_ForumExport_Info"           => "Группа форума переносится вместе с форумом автоматически, если она указана у выбранного форума. Если XML_ID не заполнен, он будет сгенерирован перед экспортом",
+        "BUILDER_ForumExport_RootGroups"     => "Корневые группы",
+        "BUILDER_ForumExport_NestedGroups"   => "Вложенные группы",
+        "BUILDER_ForumExport_WithoutGroup"   => "Без группы",
         "BUILDER_SubscribeExport1"           => "Создать миграцию для рубрик подписок",
         "BUILDER_SubscribeExport_rubric_ids" => "Выберите рубрики подписок",
         "BUILDER_SubscribeExport_Info"       => "У подписки должен быть заполнен Символьный код",
@@ -507,6 +516,7 @@
         "BUILDER_GROUP_Hlblock"   => "Highload-блоки",
         "BUILDER_GROUP_Sale"      => "Интернет-магазин",
         "BUILDER_GROUP_Form"      => "Веб-формы",
+        "BUILDER_GROUP_Forum"     => "Форумы",
         "BUILDER_GROUP_Subscribe" => "Подписки",
         "BUILDER_GROUP_Vote"      => "Опросы",
         "BUILDER_GROUP_Medialib"  => "Медиабиблиотека",

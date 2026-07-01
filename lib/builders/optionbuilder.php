@@ -55,7 +55,8 @@ class OptionBuilder extends VersionBuilder
                 'select'      => $this->createSelect(
                     $helper->Site()->getSites(),
                     'ID',
-                    'NAME'
+                    'NAME',
+                    true
                 ),
             ]
         );

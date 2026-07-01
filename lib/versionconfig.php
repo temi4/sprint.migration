@@ -5,6 +5,7 @@ namespace Sprint\Migration;
 use Sprint\Migration\Builders\AgentBuilder;
 use Sprint\Migration\Builders\BlankBuilder;
 use Sprint\Migration\Builders\CacheCleanerBuilder;
+use Sprint\Migration\Builders\CultureBuilder;
 use Sprint\Migration\Builders\EventBuilder;
 use Sprint\Migration\Builders\FormBuilder;
 use Sprint\Migration\Builders\HlblockBuilder;
@@ -263,6 +264,7 @@ class VersionConfig
     {
         return [
             'UserGroupBuilder'        => UserGroupBuilder::class,
+            'CultureBuilder'          => CultureBuilder::class,
             'IblockBuilder'           => IblockBuilder::class,
             'IblockPropertyBuilder'   => IblockPropertyBuilder::class,
             'IblockCategoryBuilder'   => IblockCategoryBuilder::class,

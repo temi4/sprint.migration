@@ -269,7 +269,7 @@
         "BUILDER_VoteExport_Info"           => "У опроса должен быть заполнен Символьный идентификатор и создан хотя бы один Список опросов",
         "BUILDER_VoteExport_UnknownChannel" => "Неизвестный канал",
         "BUILDER_OptionExport1"             => "Создать миграцию для настроек модулей",
-        "BUILDER_OptionExport_Info"         => "Переносит настройки модулей для выбранных сайтов или сайта по умолчанию, если не выбирать.",
+        "BUILDER_OptionExport_Info"         => "Переносит настройки модулей для выбранных сайтов или сайта по умолчанию (если не выбирать)",
         "BUILDER_OptionExport_module_id"    => "Выберите модули",
         "BUILDER_OptionExport_site_id"      => "Выберите сайты",
         "BUILDER_CacheCleaner1"             => "Очистка кеша",
@@ -291,6 +291,13 @@
         "BUILDER_MedialibElements1"             => "Перенести изображения медиабиблиотеки",
         "BUILDER_MedialibElements2"             => "Переносит изображения по коллекциям\nСоздает коллекции если их не было\nОбновляет изображения и коллекции с таким же названием",
         "BUILDER_MedialibElements_CollectionId" => "Выбрать коллекции",
+    ]
+);
+\Sprint\Migration\Locale::loadLocale(
+    "ru", [
+        "BUILDER_CultureExport1"              => "Создать миграцию для региональных настроек",
+        "BUILDER_CultureExport_culture_codes" => "Символьный код настройки",
+        "BUILDER_CultureExport_Info"          => "Выгружает и обновляет региональные настройки по символьным кодам",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(

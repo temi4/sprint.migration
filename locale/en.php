@@ -295,6 +295,13 @@
     ]
 );
 \Sprint\Migration\Locale::loadLocale(
+    "ru", [
+        "BUILDER_CultureExport1"              => "Create migration for cultures settings",
+        "BUILDER_CultureExport_culture_codes" => "Culture code",
+        "BUILDER_CultureExport_Info"          => "Create or update culture settings by code",
+    ]
+);
+\Sprint\Migration\Locale::loadLocale(
     "en",
     [
         "GOTO_MIGRATION"         => "Admin interface",

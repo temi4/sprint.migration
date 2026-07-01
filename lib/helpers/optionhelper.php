@@ -54,7 +54,7 @@ class OptionHelper extends Helper
             }
 
             foreach ($options as $optionName => $optionValue) {
-                $result[] = $this->prepareOption([
+                $result[] = $this->transformOption([
                     'MODULE_ID' => $filter['MODULE_ID'],
                     'NAME'      => $optionName,
                     'VALUE'     => $optionValue,
@@ -81,7 +81,7 @@ class OptionHelper extends Helper
                 $filter['SITE_ID'] ?? false
             );
 
-            return $this->prepareOption([
+            return $this->transformOption([
                 'MODULE_ID' => $filter['MODULE_ID'],
                 'NAME'      => $filter['NAME'],
                 'VALUE'     => $value,
@@ -175,7 +175,7 @@ class OptionHelper extends Helper
         }
     }
 
-    protected function prepareOption(array $item): array
+    protected function transformOption(array $item): array
     {
         if (!empty($item['VALUE']) && !is_numeric($item['VALUE'])) {
             if ($this->isSerialize($item['VALUE'])) {

@@ -27,6 +27,7 @@ use Sprint\Migration\Helpers\UserHelper;
 use Sprint\Migration\Helpers\UserOptionsHelper;
 use Sprint\Migration\Helpers\UserTypeEntityHelper;
 use Sprint\Migration\Helpers\VoteHelper;
+use Sprint\Migration\Helpers\CultureHelper;
 
 /**
  * @method IblockHelper             Iblock()
@@ -53,12 +54,13 @@ use Sprint\Migration\Helpers\VoteHelper;
  * @method HlblockExchangeHelper    HlblockExchange()
  * @method MedialibExchangeHelper   MedialibExchange()
  * @method OrderPropertiesHelper   OrderProperties()
+ * @method CultureHelper   Culture()
  */
 class HelperManager
 {
-    private static ?HelperManager $instance   = null;
-    private array                 $registered = [];
-    private array                 $cache      = [];
+    private static ?HelperManager $instance = null;
+    private array $registered = [];
+    private array $cache = [];
 
     public static function getInstance(): HelperManager
     {
@@ -72,8 +74,8 @@ class HelperManager
      * @param $name
      * @param $arguments
      *
-     * @throws HelperException
      * @return Helper
+     * @throws HelperException
      */
     public function __call($name, $arguments)
     {

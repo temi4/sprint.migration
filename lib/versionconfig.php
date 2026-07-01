@@ -3,6 +3,9 @@
 namespace Sprint\Migration;
 
 use Sprint\Migration\Builders\AgentBuilder;
+use Sprint\Migration\Builders\BlogBuilder;
+use Sprint\Migration\Builders\BlogPostBuilder;
+use Sprint\Migration\Builders\BlogUserTypeEntitiesBuilder;
 use Sprint\Migration\Builders\BlankBuilder;
 use Sprint\Migration\Builders\CacheCleanerBuilder;
 use Sprint\Migration\Builders\CultureBuilder;
@@ -277,7 +280,10 @@ class VersionConfig
             'HlblockElementsBuilder'  => HlblockElementsBuilder::class,
             'UserTypeEntitiesBuilder' => UserTypeEntitiesBuilder::class,
             'AgentBuilder'            => AgentBuilder::class,
-            'OptionBuilder'           => OptionBuilder::class,
+            'BlogBuilder'                 => BlogBuilder::class,
+            'BlogPostBuilder'             => BlogPostBuilder::class,
+            'BlogUserTypeEntitiesBuilder' => BlogUserTypeEntitiesBuilder::class,
+            'OptionBuilder'               => OptionBuilder::class,
             'FormBuilder'             => FormBuilder::class,
             'ForumBuilder'            => ForumBuilder::class,
             'VoteBuilder'             => VoteBuilder::class,

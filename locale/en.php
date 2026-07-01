@@ -76,6 +76,9 @@
         "WRITE_UP_CODE"            => "Write migration code in method up()",
         "WRITE_DOWN_CODE"          => "Write migration code in method down()",
         "LOADING_TEXT"             => "Loading...",
+        "BLOG_GROUP_UPDATED"       => "Blog group #NAME# saved",
+        "BLOG_UPDATED"             => "Blog #NAME# saved",
+        "BLOG_POST_UPDATED"        => "Blog post #NAME# saved",
         "SALE_DISCOUNT_UPDATED"    => "Cart rule #NAME# saved",
         "SUBSCRIBE_RUBRIC_UPDATED" => "Subscription rubric #NAME# saved",
         "FORUM_GROUP_UPDATED"      => "Forum group #NAME# saved",
@@ -514,6 +517,7 @@
     "en",
     [
         "BUILDER_GROUP_Main"      => "Main module",
+        "BUILDER_GROUP_Blog"      => "Blogs",
         "BUILDER_GROUP_Iblock"    => "Information blocks",
         "BUILDER_GROUP_Hlblock"   => "Highload information blocks",
         "BUILDER_GROUP_Sale"      => "Sale module",
@@ -523,6 +527,27 @@
         "BUILDER_GROUP_Subscribe" => "Subscriptions",
         "BUILDER_GROUP_Medialib"  => "Media Library",
         "BUILDER_GROUP_Tools"     => "Tools",
+    ]
+);
+
+\Sprint\Migration\Locale::loadLocale(
+    "en",
+    [
+        "BUILDER_BlogExport1"                               => "Export blog groups and blogs",
+        "BUILDER_BlogExport_Info"                           => "Transfers blog groups and blog settings.",
+        "BUILDER_BlogExport_group_ids"                      => "Select blog groups",
+        "BUILDER_BlogExport_blog_ids"                       => "Select blogs",
+        "BUILDER_BlogUserTypeEntitiesExport1"               => "Export blog custom fields",
+        "BUILDER_BlogUserTypeEntitiesExport_Info"           => "Transfers blog custom fields.",
+        "BUILDER_BlogUserTypeEntitiesExport_entity_fields" => "Select blog custom fields",
+        "BUILDER_BlogPostExport1"                           => "Export blog posts",
+        "BUILDER_BlogPostExport_Info"                       => "Transfers selected blog posts.",
+        "BUILDER_BlogPostExport_blog_id"                    => "Select blog",
+        "BUILDER_BlogPostExport_filter"                     => "Select posts",
+        "BUILDER_BlogPostExport_SelectSomeId"               => "ID list",
+        "BUILDER_BlogPostExport_SelectSomeCode"             => "CODE list",
+        "BUILDER_BlogPostExport_FilterListId"               => "Enter post IDs separated by spaces",
+        "BUILDER_BlogPostExport_FilterListCode"             => "Enter post CODEs separated by spaces",
     ]
 );
 

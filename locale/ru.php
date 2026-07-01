@@ -76,6 +76,9 @@
         "WRITE_UP_CODE"            => "Укажите код установки миграции в методе up()",
         "WRITE_DOWN_CODE"          => "Укажите код отката миграции в методе down()",
         "LOADING_TEXT"             => "Загрузка...",
+        "BLOG_GROUP_UPDATED"       => "Группа блогов #NAME# сохранена",
+        "BLOG_UPDATED"             => "Блог #NAME# сохранен",
+        "BLOG_POST_UPDATED"        => "Запись блога #NAME# сохранена",
         "SALE_DISCOUNT_UPDATED"    => "Правило корзины #NAME# сохранено",
         "SUBSCRIBE_RUBRIC_UPDATED" => "Рубрика подписки #NAME# сохранена",
         "FORUM_GROUP_UPDATED"      => "Группа форумов #NAME# сохранена",
@@ -512,6 +515,7 @@
     "ru",
     [
         "BUILDER_GROUP_Main"      => "Главный модуль",
+        "BUILDER_GROUP_Blog"      => "Блоги",
         "BUILDER_GROUP_Iblock"    => "Инфоблоки",
         "BUILDER_GROUP_Hlblock"   => "Highload-блоки",
         "BUILDER_GROUP_Sale"      => "Интернет-магазин",
@@ -521,6 +525,27 @@
         "BUILDER_GROUP_Vote"      => "Опросы",
         "BUILDER_GROUP_Medialib"  => "Медиабиблиотека",
         "BUILDER_GROUP_Tools"     => "Инструменты",
+    ]
+);
+
+\Sprint\Migration\Locale::loadLocale(
+    "ru",
+    [
+        "BUILDER_BlogExport1"                               => "Экспорт групп блогов и блогов",
+        "BUILDER_BlogExport_Info"                           => "Переносит группы блогов и настройки блогов.",
+        "BUILDER_BlogExport_group_ids"                      => "Выберите группы блогов",
+        "BUILDER_BlogExport_blog_ids"                       => "Выберите блоги",
+        "BUILDER_BlogUserTypeEntitiesExport1"               => "Экспорт пользовательских свойств блогов",
+        "BUILDER_BlogUserTypeEntitiesExport_Info"           => "Переносит пользовательские свойства блогов.",
+        "BUILDER_BlogUserTypeEntitiesExport_entity_fields" => "Выберите пользовательские свойства блогов",
+        "BUILDER_BlogPostExport1"                           => "Экспорт записей блога",
+        "BUILDER_BlogPostExport_Info"                       => "Переносит записи выбранного блога.",
+        "BUILDER_BlogPostExport_blog_id"                    => "Выберите блог",
+        "BUILDER_BlogPostExport_filter"                     => "Выберите записи",
+        "BUILDER_BlogPostExport_SelectSomeId"               => "Список ID",
+        "BUILDER_BlogPostExport_SelectSomeCode"             => "Список CODE",
+        "BUILDER_BlogPostExport_FilterListId"               => "Укажите ID записей через пробел",
+        "BUILDER_BlogPostExport_FilterListCode"             => "Укажите CODE записей через пробел",
     ]
 );
 

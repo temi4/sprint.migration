@@ -32,7 +32,7 @@ try {
     }
 
     if (!Loader::includeModule('sprint.migration')) {
-        Throw new Exception('need to install module sprint.migration');
+        throw new Exception('need to install module sprint.migration');
     }
 
     Sprint\Migration\Module::checkHealth();
@@ -43,14 +43,26 @@ try {
     require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_after.php");
 
 } catch (Throwable $exception) {
+
+    $makeRelative = function (string $path, int $depth = 0) {
+        $chunks = explode(DIRECTORY_SEPARATOR, $path);
+        $chunks = array_slice($chunks, -($depth + 1));
+
+        return '.../' . implode('/', $chunks);
+    };
+
     fwrite(STDOUT, sprintf(
-        "[%s] %s (%s) in %s:%d \n",
+        "[%s] %s (%s) in %s:%d\n",
         get_class($exception),
         $exception->getMessage(),
         $exception->getCode(),
         $exception->getFile(),
         $exception->getLine()
     ));
+
+    foreach ($exception->getTrace() as $err) {
+        fwrite(STDOUT, sprintf("%s:%d\n", $makeRelative($err['file'], 2), $err['line']));
+    }
 
     die(1);
 }

@@ -89,6 +89,35 @@ class CultureHelper extends Helper
         ])->fetch();
     }
 
+
+    /**
+     * @throws HelperException
+     */
+    public function getCultureCodeById(int $id): string
+    {
+        $row = CultureTable::getRowById($id);
+
+        if (!empty($row['CODE'])) {
+            return $row['CODE'];
+        }
+
+        throw new HelperException("Culture code with id=\"$id\" not found");
+    }
+
+    /**
+     * @throws HelperException
+     */
+    public function getCultureIdByCode(string $code)
+    {
+        $row = $this->getCultureByCode($code);
+
+        if (!empty($row['ID'])) {
+            return $row['ID'];
+        }
+
+        throw new HelperException("Culture id with code=\"$code\" not found");
+    }
+
     /**
      * @throws HelperException
      */
@@ -108,5 +137,6 @@ class CultureHelper extends Helper
             throw new HelperException($e->getMessage(), $e->getCode(), $e);
         }
     }
+
 
 }

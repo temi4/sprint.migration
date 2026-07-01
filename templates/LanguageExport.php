@@ -3,7 +3,8 @@
 /**
  * @var $version
  * @var $description
- * @var $items
+ * @var $cultures
+ * @var $languages
  * @var $extendUse
  * @var $extendClass
  * @var $moduleVersion
@@ -33,8 +34,11 @@ class <?php echo $version ?> extends <?php echo $extendClass ?>
     public function up()
     {
         $helper = $this->getHelperManager();
-<?php foreach ($items as $item) { ?>
-        $helper->Culture()->saveCulture(<?php echo var_export($item, 1) ?>);
+<?php foreach ($cultures as $item) { ?>
+    $helper->Culture()->saveCulture(<?php echo var_export($item, 1) ?>);
+<?php } ?>
+<?php foreach ($languages as $item) { ?>
+        $helper->Lang()->saveLang(<?php echo var_export($item, 1) ?>);
 <?php } ?>
     }
 }

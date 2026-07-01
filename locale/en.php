@@ -76,8 +76,10 @@
         "WRITE_UP_CODE"            => "Write migration code in method up()",
         "WRITE_DOWN_CODE"          => "Write migration code in method down()",
         "LOADING_TEXT"             => "Loading...",
-        "BLOG_GROUP_UPDATED"       => "Blog group #NAME# saved",
-        "BLOG_UPDATED"             => "Blog #NAME# saved",
+        "BLOG_GROUP_CREATED"       => "Blog group #NAME# created",
+        "BLOG_GROUP_UPDATED"       => "Blog group #NAME# updated",
+        "BLOG_CREATED"             => "Blog #NAME# created",
+        "BLOG_UPDATED"             => "Blog #NAME# updated",
         "BLOG_POST_UPDATED"        => "Blog post #NAME# saved",
         "SALE_DISCOUNT_UPDATED"    => "Cart rule #NAME# saved",
         "SUBSCRIBE_RUBRIC_UPDATED" => "Subscription rubric #NAME# saved",
@@ -311,10 +313,11 @@
     ]
 );
 \Sprint\Migration\Locale::loadLocale(
-    "ru", [
-        "BUILDER_CultureExport1"              => "Create migration for cultures settings",
-        "BUILDER_CultureExport_culture_codes" => "Culture code",
-        "BUILDER_CultureExport_Info"          => "Create or update culture settings by code",
+    "en", [
+        "BUILDER_LanguageExport"            => "Create migration for languages and cultures settings",
+        "BUILDER_LanguageExport_cult_codes" => "Select cultures",
+        "BUILDER_LanguageExport_lang_ids"   => "Select languages",
+        "BUILDER_LanguageExport_Info"       => "Set culture codes to see them in the list",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(
@@ -377,13 +380,13 @@
         "ERR_SOME_MIGRATIONS_FAILS"              => "Some migrations fails",
         "ERR_VERSION_NOT_FOUND"                  => "Migration not found",
         "ERR_INVALID_ARGUMENTS"                  => "Invalid arguments, see help",
-        "ERR_COMMAND_NOT_FOUND"                  => "Command \"#NAME#\" not found, смотрите помощь",
+        "ERR_COMMAND_NOT_FOUND"                  => "Command \"#NAME#\" not found, see help",
         "ERR_METHOD_NOT_FOUND"                   => "Method \"#NAME#\"  not found",
+        "ERR_TEMPLATE_NOT_FOUND"                 => "Migration template \"#NAME#\" not found",
         "ERR_CANT_CREATE_FILE"                   => "Cant create file \"#NAME#\"",
         "ERR_FORM_NOT_FOUND"                     => "Form \"#NAME#\" not found",
         "ERR_EMPTY_REQ_FIELD"                    => "Required field \"#NAME#\" is empty",
         "ERR_EMPTY_REQ_FIELDS"                   => "Required fields empty",
-        "ERR_HELPER_DISABLED"                    => "Helper disabled",
         "ERR_AGENT_NOT_ADDED"                    => "Agent \"#NAME#\" not created",
         "ERR_EVENT_TYPE_NOT_UPDATED"             => "Event type not updated",
         "ERR_CANT_DELETE_FORM"                   => "Error deleting form \"#NAME#\"",
@@ -395,7 +398,7 @@
         "ERR_HLBLOCK_ELEMENT_NOT_FOUND"          => "Element \"#ELEMENT_ID#\" in highload-block \"#HLBLOCK_ID#\" not found",
         "ERR_HLBLOCK_FIELD_NOT_FOUND"            => "Highload block field not found",
         "ERR_DEFAULT_LANGUAGE_NOT_FOUND"         => "Default language not found",
-        "ERR_ACTIVE_LANGUAGES_NOT_FOUND"         => "Active languages not found",
+        "ERR_LANGUAGES_NOT_FOUND"                => "Languages not found",
         "ERR_DEFAULT_SITE_NOT_FOUND"             => "Default site not found",
         "ERR_ACTIVE_SITES_NOT_FOUND"             => "Active sites not found",
         "ERR_USER_GROUP_CODE_NOT_FOUND"          => "User group code not found",
@@ -493,6 +496,10 @@
         "IB_TYPE_UPDATED"                => "Information block type \"#NAME#\" updated",
         "IB_TYPE_EQUAL"                  => "Information block type \"#NAME#\" equivalent",
         "IB_TYPE_DELETED"                => "Information block type \"#NAME#\" deleted",
+        "LANG_CREATED"                   => "Language created",
+        "LANG_UPDATED"                   => "Language updated",
+        "CULTURE_CREATED"                => "Culture created",
+        "CULTURE_UPDATED"                => "Culture updated",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(
@@ -533,21 +540,21 @@
 \Sprint\Migration\Locale::loadLocale(
     "en",
     [
-        "BUILDER_BlogExport1"                               => "Export blog groups and blogs",
-        "BUILDER_BlogExport_Info"                           => "Transfers blog groups and blog settings.",
-        "BUILDER_BlogExport_group_ids"                      => "Select blog groups",
-        "BUILDER_BlogExport_blog_ids"                       => "Select blogs",
-        "BUILDER_BlogUserTypeEntitiesExport1"               => "Export blog custom fields",
-        "BUILDER_BlogUserTypeEntitiesExport_Info"           => "Transfers blog custom fields.",
+        "BUILDER_BlogExport1"                              => "Export blogs",
+        "BUILDER_BlogExport_Info"                          => "Transfers blog groups and blog settings.",
+        "BUILDER_BlogExport_group_id"                      => "Select blog group",
+        "BUILDER_BlogExport_blog_ids"                      => "Select blogs",
+        "BUILDER_BlogUserTypeEntitiesExport1"              => "Export blog custom fields",
+        "BUILDER_BlogUserTypeEntitiesExport_Info"          => "Transfers blog custom fields.",
         "BUILDER_BlogUserTypeEntitiesExport_entity_fields" => "Select blog custom fields",
-        "BUILDER_BlogPostExport1"                           => "Export blog posts",
-        "BUILDER_BlogPostExport_Info"                       => "Transfers selected blog posts.",
-        "BUILDER_BlogPostExport_blog_id"                    => "Select blog",
-        "BUILDER_BlogPostExport_filter"                     => "Select posts",
-        "BUILDER_BlogPostExport_SelectSomeId"               => "ID list",
-        "BUILDER_BlogPostExport_SelectSomeCode"             => "CODE list",
-        "BUILDER_BlogPostExport_FilterListId"               => "Enter post IDs separated by spaces",
-        "BUILDER_BlogPostExport_FilterListCode"             => "Enter post CODEs separated by spaces",
+        "BUILDER_BlogPostExport1"                          => "Export blog posts",
+        "BUILDER_BlogPostExport_Info"                      => "Transfers selected blog posts.",
+        "BUILDER_BlogPostExport_blog_id"                   => "Select blog",
+        "BUILDER_BlogPostExport_filter"                    => "Select posts",
+        "BUILDER_BlogPostExport_SelectSomeId"              => "ID list",
+        "BUILDER_BlogPostExport_SelectSomeCode"            => "CODE list",
+        "BUILDER_BlogPostExport_FilterListId"              => "Enter post IDs separated by spaces",
+        "BUILDER_BlogPostExport_FilterListCode"            => "Enter post CODEs separated by spaces",
     ]
 );
 

@@ -18,9 +18,18 @@ class IblockPropertyDeleteBuilder extends VersionBuilder
 
     protected function initialize(): void
     {
-        $this->setTitle(Locale::getMessage('BUILDER_IblockPropertyDelete'));
-        $this->setDescription(Locale::getMessage('BUILDER_IblockPropertyDelete_Info'));
         $this->setGroup(Locale::getMessage('BUILDER_GROUP_Iblock'));
+
+        $this->setTitle(implode(' ', [
+            Locale::getMessage('BUILDER_IblockPropertyDelete'),
+            Locale::getMessage('DEVELOPER_LABEL'),
+        ]));
+
+        $this->setDescription(implode(PHP_EOL, [
+            Locale::getMessage('DEVELOPER_NAME', ['#VALUE#' => '@temi4']),
+            Locale::getMessage('DEVELOPER_URI', ['#VALUE#' => 'https://github.com/andreyryabin/sprint.migration/pull/184']),
+            Locale::getMessage('BUILDER_IblockPropertyDelete_Info'),
+        ]));
 
         $this->addVersionFields();
     }
@@ -67,8 +76,8 @@ class IblockPropertyDeleteBuilder extends VersionBuilder
         $this->addField(
             'property_codes',
             [
-                'title' => Locale::getMessage('BUILDER_IblockPropertyDelete_Codes'),
-                'width' => 350,
+                'title'  => Locale::getMessage('BUILDER_IblockPropertyDelete_Codes'),
+                'width'  => 350,
                 'height' => 80,
             ]
         );

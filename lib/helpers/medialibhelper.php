@@ -18,8 +18,6 @@ class MedialibHelper extends Helper
 
     public function __construct()
     {
-        parent::__construct();
-
         CMedialib::Init();
     }
 

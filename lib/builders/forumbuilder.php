@@ -27,6 +27,7 @@ class ForumBuilder extends VersionBuilder
 
         $this->setDescription(implode(PHP_EOL, [
             Locale::getMessage('DEVELOPER_NAME', ['#VALUE#' => '@temi4']),
+            Locale::getMessage('DEVELOPER_URI', ['#VALUE#' => 'https://github.com/andreyryabin/sprint.migration/pull/183']),
             Locale::getMessage('BUILDER_ForumExport_Info'),
         ]));
 

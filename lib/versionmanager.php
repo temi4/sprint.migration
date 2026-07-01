@@ -283,40 +283,32 @@ class VersionManager
         $versionOrStatus = trim($versionOrStatus);
         $toStatus = trim($toStatus);
 
-        $result = [];
-        if (in_array(
-            $toStatus, [
-                VersionEnum::STATUS_NEW,
-                VersionEnum::STATUS_INSTALLED,
-            ]
-        )) {
-            if ($this->versionConfig->checkVersionName($versionOrStatus)) {
-                $meta = $this->getVersionByName($versionOrStatus);
-                $meta = !empty($meta) ? $meta : ['version' => $versionOrStatus];
-                $result[] = $this->markMigrationByMeta($meta, $toStatus);
-            } elseif (in_array(
-                $versionOrStatus,
-                [
-                    VersionEnum::STATUS_NEW,
-                    VersionEnum::STATUS_INSTALLED,
-                    VersionEnum::STATUS_UNKNOWN,
-                ]
-            )) {
-                $metas = $this->getVersions(['status' => $versionOrStatus]);
-                foreach ($metas as $meta) {
-                    $result[] = $this->markMigrationByMeta($meta, $toStatus);
-                }
-            }
+        if (!in_array($toStatus, [VersionEnum::STATUS_NEW, VersionEnum::STATUS_INSTALLED])) {
+            $toStatus = VersionEnum::STATUS_INSTALLED;
         }
 
-        if (empty($result)) {
-            $result[] = [
+        if (in_array($versionOrStatus, [VersionEnum::STATUS_NEW, VersionEnum::STATUS_INSTALLED, VersionEnum::STATUS_UNKNOWN])) {
+            $result = [];
+            $metas = $this->getVersions(['status' => $versionOrStatus]);
+            foreach ($metas as $meta) {
+                $result[] = $this->markMigrationByMeta($meta, $toStatus);
+            }
+            return $result;
+        }
+
+
+        if ($this->versionConfig->checkVersionName($versionOrStatus)) {
+            $meta = $this->getVersionByName($versionOrStatus);
+            $meta = !empty($meta) ? $meta : ['version' => $versionOrStatus];
+            return [$this->markMigrationByMeta($meta, $toStatus)];
+        }
+
+        return [
+            [
                 'message' => Locale::getMessage('MARK_ERROR4'),
                 'success' => false,
-            ];
-        }
-
-        return $result;
+            ]
+        ];
     }
 
     /**
@@ -362,7 +354,7 @@ class VersionManager
             }
 
             $versionName = pathinfo($item->getPathname(), PATHINFO_FILENAME);
-            if (!$this->versionConfig->checkVersionName($versionName)){
+            if (!$this->versionConfig->checkVersionName($versionName)) {
                 continue;
             }
 

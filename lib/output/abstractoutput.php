@@ -2,8 +2,6 @@
 
 namespace Sprint\Migration\Output;
 
-use Sprint\Migration\VersionManager;
-
 abstract class AbstractOutput implements OutputInterface
 {
     public function outInfo(string $msg, ...$vars): void
@@ -139,35 +137,26 @@ abstract class AbstractOutput implements OutputInterface
             return;
         }
 
+        $makeRelative = function (string $path, int $depth = 0) {
+            $chunks = explode(DIRECTORY_SEPARATOR, $path);
+            $chunks = array_slice($chunks, -($depth + 1));
+
+            return '.../' . implode('/', $chunks);
+        };
+
         $this->outWarning(
-            "[%s] %s (%s)",
+            "[%s] %s (%s) in %s:%d",
             get_class($exception),
             $exception->getMessage(),
             $exception->getCode(),
+            $makeRelative($exception->getFile(), 2),
+            $exception->getLine()
         );
-    }
 
-    private function startMigrationOffset(array $trace): int
-    {
-        foreach ($trace as $index => $item) {
-            if ($item['class'] == VersionManager::class && $item['function'] == 'startMigration') {
-                return (int)$index;
-            }
-        }
-        return -1;
-    }
-
-    private function outExceptionTrace(array $trace): void
-    {
-        foreach ($trace as $index => $err) {
-            $name = '';
-            if ($err['class'] && $err['function']) {
-                $name = '[b]' . $err['class'] . '[/]::' . $err['function'];
-            } elseif ($err['function']) {
-                $name = '[b]' . $err['function'] . '[/]';
-            }
-
-            $this->out('[b]#' . $index . '[/] ' . $name . '(...);');
+        foreach ($exception->getTrace() as $err) {
+            $this->out('%s:%d', $makeRelative($err['file'], 2), $err['line']);
         }
     }
+
+
 }

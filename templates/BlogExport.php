@@ -3,7 +3,7 @@
 /**
  * @var $version
  * @var $description
- * @var $groups
+ * @var $group
  * @var $blogs
  * @var $extendUse
  * @var $extendClass
@@ -34,13 +34,10 @@ class <?php echo $version ?> extends <?php echo $extendClass ?>
     public function up()
     {
         $helper = $this->getHelperManager();
-<?php foreach ($groups as $group) { ?>
-        $helper->Blog()->saveGroup(<?php echo var_export($group, 1) ?>);
-<?php } ?>
-<?php foreach ($blogs as $blog) { ?>
-        $groupId = $helper->Blog()->saveGroup(<?php echo var_export($blog['GROUP'], 1) ?>);
 
-<?php unset($blog['GROUP']); ?>
+        $groupId = $helper->Blog()->saveGroup(<?php echo var_export($group, 1) ?>);
+
+<?php foreach ($blogs as $blog) { ?>
         $helper->Blog()->saveBlog($groupId, <?php echo var_export($blog, 1) ?>);
 <?php } ?>
     }

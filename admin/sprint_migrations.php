@@ -5,8 +5,9 @@ use Sprint\Migration\ConfigManager;
 use Sprint\Migration\Enum\VersionEnum;
 use Sprint\Migration\Locale;
 use Sprint\Migration\Module;
-use Sprint\Migration\Output\HtmlOutput;
 use Sprint\Migration\Output;
+use Sprint\Migration\Output\HtmlOutput;
+use function Sprint\Migration\Output\null;
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
 
@@ -29,8 +30,8 @@ try {
     );
 
     Output::getInstance()
-                 ->addOutput(new HtmlOutput())
-                 ->addLogger($versionConfig->getLogger());
+        ->addOutput(new HtmlOutput())
+        ->addLogger($versionConfig->getLogger());
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" && $versionConfig->getVal('show_admin_interface')) {
         require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_js.php");
@@ -76,13 +77,28 @@ try {
 } catch (Throwable $exception) {
     require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
 
+
+    $makeRelative = function (string $path, int $depth = 0) {
+        $chunks = explode(DIRECTORY_SEPARATOR, $path);
+        $chunks = array_slice($chunks, -($depth + 1));
+
+        return '.../' . implode('/', $chunks);
+    };
+
     $sperrors = [];
+
     $sperrors[] = sprintf(
-        "[%s] %s (%s)\n",
+        "[%s] %s (%s) in %s:%d",
         get_class($exception),
         $exception->getMessage(),
         $exception->getCode(),
+        $makeRelative($exception->getFile()),
+        $exception->getLine()
     );
+
+    foreach ($exception->getTrace() as $err) {
+        $sperrors[] = sprintf('%s:%d', $makeRelative($err['file'], 2), $err['line']);
+    }
 
     include __DIR__ . '/includes/errors.php';
     include __DIR__ . '/includes/help.php';

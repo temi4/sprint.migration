@@ -42,11 +42,9 @@ class BlogBuilder extends VersionBuilder
     {
         $helper = $this->getHelperManager();
 
-        $groupIds = $this->addFieldAndReturn('group_ids', [
-            'title'    => Locale::getMessage('BUILDER_BlogExport_group_ids'),
+        $groupId = $this->addFieldAndReturn('group_id', [
+            'title'    => Locale::getMessage('BUILDER_BlogExport_group_id'),
             'width'    => 350,
-            'multiple' => 1,
-            'value'    => [],
             'items'    => $this->getGroupsSelect(),
         ]);
 
@@ -55,21 +53,18 @@ class BlogBuilder extends VersionBuilder
             'width'    => 350,
             'multiple' => 1,
             'value'    => [],
-            'items'    => $this->getBlogsSelect(),
+            'items'    => $this->getBlogsSelect($groupId),
         ]);
 
-        $groups = $helper->Blog()->exportGroups($groupIds);
-        $blogs = $helper->Blog()->exportBlogs($blogIds);
+        $group = $helper->Blog()->exportGroupById($groupId);
 
-        if (empty($groups) && empty($blogs)) {
-            $this->rebuildField('group_ids');
-        }
+        $blogs = $helper->Blog()->exportBlogs($blogIds);
 
         $this->createVersionFile(
             Module::getModuleTemplateFile('BlogExport'),
             [
-                'groups' => $groups,
-                'blogs'  => $blogs,
+                'group' => $group,
+                'blogs' => $blogs,
             ]
         );
     }
@@ -84,13 +79,13 @@ class BlogBuilder extends VersionBuilder
         return $this->createSelectWithGroups($items, 'ID', 'TITLE', 'SITE_ID');
     }
 
-    protected function getBlogsSelect(): array
+    protected function getBlogsSelect(int $groupIds): array
     {
         $items = array_map(function ($item) {
             $item['GROUP_TITLE'] = '[' . $item['GROUP_SITE_ID'] . '] ' . $item['GROUP_NAME'];
             $item['TITLE'] = '[' . $item['URL'] . '] ' . $item['NAME'];
             return $item;
-        }, $this->getHelperManager()->Blog()->getBlogs());
+        }, $this->getHelperManager()->Blog()->getBlogs(['GROUP_ID' => $groupIds]));
 
         return $this->createSelectWithGroups($items, 'ID', 'TITLE', 'GROUP_TITLE');
     }

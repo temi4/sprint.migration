@@ -5,6 +5,7 @@ namespace Sprint\Migration;
 use Sprint\Migration\Exceptions\HelperException;
 use Sprint\Migration\Helpers\AgentHelper;
 use Sprint\Migration\Helpers\BlogHelper;
+use Sprint\Migration\Helpers\CultureHelper;
 use Sprint\Migration\helpers\DeliveryServiceHelper;
 use Sprint\Migration\Helpers\EventHelper;
 use Sprint\Migration\Helpers\FormHelper;
@@ -29,7 +30,6 @@ use Sprint\Migration\Helpers\UserHelper;
 use Sprint\Migration\Helpers\UserOptionsHelper;
 use Sprint\Migration\Helpers\UserTypeEntityHelper;
 use Sprint\Migration\Helpers\VoteHelper;
-use Sprint\Migration\Helpers\CultureHelper;
 
 /**
  * @method IblockHelper             Iblock()
@@ -104,14 +104,20 @@ class HelperManager
 
         $class = $this->registered[$name] ?? $default;
 
-        if (class_exists($class)) {
-            $ob = new $class;
-            if ($ob instanceof Helper) {
-                $this->cache[$name] = $ob;
-                return $ob;
-            }
+        if (!class_exists($class)) {
+            throw new HelperException("Helper \"$name\" in \"$class\" not found");
+        }
+        $ob = new $class;
+        if (!($ob instanceof Helper)) {
+            throw new HelperException("Class \"$class\" is not helper");
         }
 
-        throw new HelperException("Helper \"$name\" in \"$class\" not found");
+        if (!$ob->isEnabled()) {
+            throw new HelperException("Helper \"$name\" disabled");
+        }
+
+        $this->cache[$name] = $ob;
+        return $ob;
+
     }
 }

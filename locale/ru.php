@@ -76,8 +76,10 @@
         "WRITE_UP_CODE"            => "Укажите код установки миграции в методе up()",
         "WRITE_DOWN_CODE"          => "Укажите код отката миграции в методе down()",
         "LOADING_TEXT"             => "Загрузка...",
-        "BLOG_GROUP_UPDATED"       => "Группа блогов #NAME# сохранена",
-        "BLOG_UPDATED"             => "Блог #NAME# сохранен",
+        "BLOG_GROUP_CREATED"       => "Группа блогов #NAME# добавлена",
+        "BLOG_GROUP_UPDATED"       => "Группа блогов #NAME# обновлена",
+        "BLOG_CREATED"             => "Блог #NAME# добавлен",
+        "BLOG_UPDATED"             => "Блог #NAME# обновлён",
         "BLOG_POST_UPDATED"        => "Запись блога #NAME# сохранена",
         "SALE_DISCOUNT_UPDATED"    => "Правило корзины #NAME# сохранено",
         "SUBSCRIBE_RUBRIC_UPDATED" => "Рубрика подписки #NAME# сохранена",
@@ -311,9 +313,10 @@
 );
 \Sprint\Migration\Locale::loadLocale(
     "ru", [
-        "BUILDER_CultureExport1"              => "Создать миграцию для региональных настроек",
-        "BUILDER_CultureExport_culture_codes" => "Символьный код настройки",
-        "BUILDER_CultureExport_Info"          => "Выгружает и обновляет региональные настройки по символьным кодам",
+        "BUILDER_LanguageExport"            => "Создать миграцию для языков и региональных настроек",
+        "BUILDER_LanguageExport_cult_codes" => "Выберите региональные настройки",
+        "BUILDER_LanguageExport_lang_ids"   => "Выберите языки интерфейса",
+        "BUILDER_LanguageExport_Info"       => "Задайте символьные коды региональным настройкам",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(
@@ -378,11 +381,11 @@
         "ERR_INVALID_ARGUMENTS"                  => "Укажите корректные аргументы, смотрите помощь",
         "ERR_COMMAND_NOT_FOUND"                  => "Команда \"#NAME#\" не найдена, смотрите помощь",
         "ERR_METHOD_NOT_FOUND"                   => "Метод \"#NAME#\"  не найден",
+        "ERR_TEMPLATE_NOT_FOUND"                 => "Шаблон миграции \"#NAME#\" не найден",
         "ERR_CANT_CREATE_FILE"                   => "Ошибка создания файла \"#NAME#\"",
         "ERR_FORM_NOT_FOUND"                     => "Форма \"#NAME#\" не найдена",
         "ERR_EMPTY_REQ_FIELD"                    => "Обязательное поле \"#NAME#\" не заполнено",
         "ERR_EMPTY_REQ_FIELDS"                   => "Укажите обязательные поля",
-        "ERR_HELPER_DISABLED"                    => "Помощник отключен",
         "ERR_AGENT_NOT_ADDED"                    => "Агент \"#NAME#\" не добавлен",
         "ERR_EVENT_TYPE_NOT_UPDATED"             => "Тип почтового события не обновлен",
         "ERR_CANT_DELETE_FORM"                   => "Ошибка удаления формы \"#NAME#\"",
@@ -394,7 +397,7 @@
         "ERR_HLBLOCK_ELEMENT_NOT_FOUND"          => "Элемент \"#ELEMENT_ID#\" в highload-блоке \"#HLBLOCK_ID#\" не найден",
         "ERR_HLBLOCK_FIELD_NOT_FOUND"            => "Поле для highload-блока не найдено",
         "ERR_DEFAULT_LANGUAGE_NOT_FOUND"         => "Основной яык не найден",
-        "ERR_ACTIVE_LANGUAGES_NOT_FOUND"         => "Языки не найдены",
+        "ERR_LANGUAGES_NOT_FOUND"                => "Языки не найдены",
         "ERR_DEFAULT_SITE_NOT_FOUND"             => "Основной сайт не найден",
         "ERR_ACTIVE_SITES_NOT_FOUND"             => "Сайты не найдены",
         "ERR_USER_GROUP_CODE_NOT_FOUND"          => "Не найден код группы",
@@ -491,6 +494,10 @@
         "IB_TYPE_UPDATED"                => "Тип инфоблока \"#NAME#\" обновлен",
         "IB_TYPE_EQUAL"                  => "Тип инфоблока \"#NAME#\" совпадает",
         "IB_TYPE_DELETED"                => "Тип инфоблока \"#NAME#\" удален",
+        "LANG_CREATED"                   => "Язык добавлен",
+        "LANG_UPDATED"                   => "Язык обновлён",
+        "CULTURE_CREATED"                => "Региональная настройка добавлена",
+        "CULTURE_UPDATED"                => "Региональная настройка обновлена",
     ]
 );
 \Sprint\Migration\Locale::loadLocale(
@@ -531,21 +538,21 @@
 \Sprint\Migration\Locale::loadLocale(
     "ru",
     [
-        "BUILDER_BlogExport1"                               => "Экспорт групп блогов и блогов",
-        "BUILDER_BlogExport_Info"                           => "Переносит группы блогов и настройки блогов.",
-        "BUILDER_BlogExport_group_ids"                      => "Выберите группы блогов",
-        "BUILDER_BlogExport_blog_ids"                       => "Выберите блоги",
-        "BUILDER_BlogUserTypeEntitiesExport1"               => "Экспорт пользовательских свойств блогов",
-        "BUILDER_BlogUserTypeEntitiesExport_Info"           => "Переносит пользовательские свойства блогов.",
+        "BUILDER_BlogExport1"                              => "Экспорт блогов",
+        "BUILDER_BlogExport_Info"                          => "Переносит группы блогов и настройки блогов.",
+        "BUILDER_BlogExport_group_id"                      => "Выберите группу блогов",
+        "BUILDER_BlogExport_blog_ids"                      => "Выберите блоги",
+        "BUILDER_BlogUserTypeEntitiesExport1"              => "Экспорт пользовательских свойств блогов",
+        "BUILDER_BlogUserTypeEntitiesExport_Info"          => "Переносит пользовательские свойства блогов.",
         "BUILDER_BlogUserTypeEntitiesExport_entity_fields" => "Выберите пользовательские свойства блогов",
-        "BUILDER_BlogPostExport1"                           => "Экспорт записей блога",
-        "BUILDER_BlogPostExport_Info"                       => "Переносит записи выбранного блога.",
-        "BUILDER_BlogPostExport_blog_id"                    => "Выберите блог",
-        "BUILDER_BlogPostExport_filter"                     => "Выберите записи",
-        "BUILDER_BlogPostExport_SelectSomeId"               => "Список ID",
-        "BUILDER_BlogPostExport_SelectSomeCode"             => "Список CODE",
-        "BUILDER_BlogPostExport_FilterListId"               => "Укажите ID записей через пробел",
-        "BUILDER_BlogPostExport_FilterListCode"             => "Укажите CODE записей через пробел",
+        "BUILDER_BlogPostExport1"                          => "Экспорт записей блога",
+        "BUILDER_BlogPostExport_Info"                      => "Переносит записи выбранного блога.",
+        "BUILDER_BlogPostExport_blog_id"                   => "Выберите блог",
+        "BUILDER_BlogPostExport_filter"                    => "Выберите записи",
+        "BUILDER_BlogPostExport_SelectSomeId"              => "Список ID",
+        "BUILDER_BlogPostExport_SelectSomeCode"            => "Список CODE",
+        "BUILDER_BlogPostExport_FilterListId"              => "Укажите ID записей через пробел",
+        "BUILDER_BlogPostExport_FilterListCode"            => "Укажите CODE записей через пробел",
     ]
 );
 

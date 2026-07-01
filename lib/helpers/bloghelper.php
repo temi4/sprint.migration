@@ -14,12 +14,19 @@ use CUserFieldEnum;
 use CUserTypeEntity;
 use Sprint\Migration\Exceptions\HelperException;
 use Sprint\Migration\Helper;
-use Sprint\Migration\HelperManager;
 use Sprint\Migration\Locale;
 use Sprint\Migration\Module;
 
 class BlogHelper extends Helper
 {
+
+    private UserHelper $userHelper;
+
+    public function __construct()
+    {
+        $this->userHelper = new UserHelper();
+    }
+
     public function isEnabled(): bool
     {
         return $this->checkModules(['blog']);
@@ -36,7 +43,11 @@ class BlogHelper extends Helper
             $filter,
             false,
             false,
-            ['ID', 'SITE_ID', 'NAME']
+            [
+                'ID',
+                'SITE_ID',
+                'NAME'
+            ]
         ));
     }
 
@@ -122,21 +133,12 @@ class BlogHelper extends Helper
     public function exportBlogById(int $blogId): array
     {
         $blog = $this->getBlogById($blogId);
-        $group = $this->getGroupById((int)$blog['GROUP_ID']);
 
         if ((int)($blog['SOCNET_GROUP_ID'] ?? 0) > 0) {
             throw new HelperException("Socialnetwork blog \"$blogId\" is not supported");
         }
 
-        $blog['GROUP'] = $this->export(
-            $group,
-            $this->getDefaultGroup(),
-            ['ID']
-        );
-
-        $blog['OWNER_LOGIN'] = HelperManager::getInstance()
-            ->User()
-            ->getUserLoginById((int)$blog['OWNER_ID']);
+        $blog['OWNER_LOGIN'] = $this->userHelper->getUserLoginById((int)$blog['OWNER_ID']);
 
         $blog['USER_GROUPS'] = $this->exportUserGroups($blog);
 
@@ -165,9 +167,7 @@ class BlogHelper extends Helper
             throw new HelperException("Blog post \"$postId\" has empty CODE");
         }
 
-        $post['AUTHOR_LOGIN'] = HelperManager::getInstance()
-            ->User()
-            ->getUserLoginById((int)$post['AUTHOR_ID']);
+        $post['AUTHOR_LOGIN'] = $this->userHelper->getUserLoginById((int)$post['AUTHOR_ID']);
 
         $post['CATEGORIES'] = $this->exportPostCategories((int)$post['BLOG_ID'], (int)$post['ID']);
         $post['PERMS_POST'] = $this->exportPostPerms((int)$post['BLOG_ID'], (int)$post['ID'], BLOG_PERMS_POST);
@@ -197,16 +197,15 @@ class BlogHelper extends Helper
     {
         $this->checkRequiredKeys($fields, ['SITE_ID', 'NAME']);
 
-        $fields = $this->prepareGroupFields($fields);
-        $groupId = $this->getGroupId($fields['SITE_ID'], $fields['NAME']);
+        $groupId = $this->getGroupIdBySiteAndName($fields['SITE_ID'], $fields['NAME']);
 
         if (!$groupId) {
             return $this->addGroup($fields);
         }
 
-        $exists = $this->export($this->getGroupById($groupId), $this->getDefaultGroup(), ['ID']);
-        $export = $this->export($fields, $this->getDefaultGroup(), []);
-        if ($this->checkDiff($exists, $export)) {
+        $exists = $this->exportGroupById($groupId);
+
+        if ($this->checkDiff($exists, $fields)) {
             return $this->updateGroup($groupId, $fields);
         }
 
@@ -224,35 +223,16 @@ class BlogHelper extends Helper
             throw new HelperException("Blog group \"$groupId\" not found");
         }
 
-        $hasUserGroups = array_key_exists('USER_GROUPS', $fields);
-        $blogId = $this->getBlogId($fields['URL']);
-        $fieldsForSave = $this->prepareBlogFieldsForSave($groupId, $fields);
+        $blogId = $this->getBlogIdByUrl($fields['URL']);
 
         if (!$blogId) {
-            $blogId = $this->addBlog($fieldsForSave);
-            if ($hasUserGroups) {
-                $this->saveUserGroups($blogId, $fields['USER_GROUPS']);
-            }
-            return $blogId;
+            return $this->addBlog($groupId, $fields);
         }
 
         $exists = $this->exportBlogById($blogId);
-        $export = $this->prepareExportBlog(array_merge($fieldsForSave, [
-            'GROUP'        => $this->export($this->getGroupById($groupId), $this->getDefaultGroup(), ['ID']),
-            'OWNER_LOGIN'  => $fields['OWNER_LOGIN'],
-            'USER_GROUPS'  => $fields['USER_GROUPS'] ?? [],
-        ]));
 
-        if (!$hasUserGroups) {
-            unset($exists['USER_GROUPS'], $export['USER_GROUPS']);
-        }
-
-        if ($this->checkDiff($exists, $export)) {
-            $blogId = $this->updateBlog($blogId, $fieldsForSave);
-        }
-
-        if ($hasUserGroups) {
-            $this->saveUserGroups($blogId, $fields['USER_GROUPS']);
+        if ($this->checkDiff($exists, $fields)) {
+            return $this->updateBlog($blogId, $fields);
         }
 
         return $blogId;
@@ -297,7 +277,7 @@ class BlogHelper extends Helper
         return $postId;
     }
 
-    public function getGroupId(string $siteId, string $name): int
+    public function getGroupIdBySiteAndName(string $siteId, string $name): int
     {
         $group = CBlogGroup::GetList(
             ['ID' => 'ASC'],
@@ -313,7 +293,7 @@ class BlogHelper extends Helper
         return (int)($group['ID'] ?? 0);
     }
 
-    public function getBlogId(string $url): int
+    public function getBlogIdByUrl(string $url): int
     {
         $blog = CBlog::GetList(
             ['ID' => 'ASC'],
@@ -406,7 +386,7 @@ class BlogHelper extends Helper
     {
         $groupId = CBlogGroup::Add($fields);
         if ($groupId) {
-            $this->outNotice(Locale::getMessage('BLOG_GROUP_UPDATED', ['#NAME#' => $fields['NAME']]));
+            $this->outNotice(Locale::getMessage('BLOG_GROUP_CREATED', ['#NAME#' => $fields['NAME']]));
             return (int)$groupId;
         }
 
@@ -432,11 +412,37 @@ class BlogHelper extends Helper
     /**
      * @throws HelperException
      */
-    protected function addBlog(array $fields): int
+    public function addBlog(int $groupId, array $fields): int
     {
-        $blogId = CBlog::Add($this->prepareBlogFieldsForAdd($fields));
+        $fields['GROUP_ID'] = $groupId;
+
+        if (isset($fields['OWNER_LOGIN'])) {
+            $fields['OWNER_ID'] = $this->userHelper->getUserIdByLogin((string)$fields['OWNER_LOGIN']);
+            unset($fields['OWNER_LOGIN']);
+        }
+
+        $userGroups = [];
+        if (isset($fields['USER_GROUPS'])) {
+            $userGroups = $fields['USER_GROUPS'];
+            unset($fields['USER_GROUPS']);
+        }
+
+        global $DB;
+
+        if (empty($fields['=DATE_CREATE'])) {
+            $fields['=DATE_CREATE'] = $DB->CurrentTimeFunction();
+        }
+
+        if (empty($fields['=DATE_UPDATE'])) {
+            $fields['=DATE_UPDATE'] = $DB->CurrentTimeFunction();
+        }
+
+        $blogId = CBlog::Add($fields);
         if ($blogId) {
-            $this->outNotice(Locale::getMessage('BLOG_UPDATED', ['#NAME#' => $fields['NAME']]));
+
+            $this->saveUserGroups($blogId, $userGroups);
+
+            $this->outNotice(Locale::getMessage('BLOG_CREATED', ['#NAME#' => $fields['NAME']]));
             return (int)$blogId;
         }
 
@@ -449,8 +455,27 @@ class BlogHelper extends Helper
      */
     protected function updateBlog(int $blogId, array $fields): int
     {
-        $result = CBlog::Update($blogId, $this->prepareBlogFieldsForUpdate($fields));
+        global $DB;
+
+        if (isset($fields['OWNER_LOGIN'])) {
+            $fields['OWNER_ID'] = $this->userHelper->getUserIdByLogin((string)$fields['OWNER_LOGIN']);
+            unset($fields['OWNER_LOGIN']);
+        }
+
+        $userGroups = [];
+        if (isset($fields['USER_GROUPS'])) {
+            $userGroups = $fields['USER_GROUPS'];
+            unset($fields['USER_GROUPS']);
+        }
+
+        if (empty($fields['=DATE_UPDATE'])) {
+            $fields['=DATE_UPDATE'] = $DB->CurrentTimeFunction();
+        }
+
+        $result = CBlog::Update($blogId, $fields);
         if ($result) {
+            $this->saveUserGroups($blogId, $userGroups);
+
             $this->outNotice(Locale::getMessage('BLOG_UPDATED', ['#NAME#' => $fields['NAME']]));
             return $blogId;
         }
@@ -500,37 +525,12 @@ class BlogHelper extends Helper
     /**
      * @throws HelperException
      */
-    protected function prepareBlogFieldsForSave(int $groupId, array $fields): array
-    {
-        $fields = array_merge($this->getDefaultBlog(), $fields);
-        $fields['GROUP_ID'] = $groupId;
-        $fields['OWNER_ID'] = HelperManager::getInstance()
-            ->User()
-            ->getUserIdByLogin((string)$fields['OWNER_LOGIN']);
-
-        $this->unsetKeys($fields, [
-            'GROUP',
-            'OWNER_LOGIN',
-            'USER_GROUPS',
-        ]);
-
-        return array_intersect_key(
-            $fields,
-            array_flip($this->getBlogSaveKeys())
-        );
-    }
-
-    /**
-     * @throws HelperException
-     */
     protected function preparePostFieldsForSave(int $blogId, array $fields, string $exchangeDir = ''): array
     {
         $hasAttachImg = array_key_exists('ATTACH_IMG', $fields);
         $fields = array_merge($this->getDefaultPost(), $fields);
         $fields['BLOG_ID'] = $blogId;
-        $fields['AUTHOR_ID'] = HelperManager::getInstance()
-            ->User()
-            ->getUserIdByLogin((string)$fields['AUTHOR_LOGIN']);
+        $fields['AUTHOR_ID'] = $this->userHelper->getUserIdByLogin((string)$fields['AUTHOR_LOGIN']);
 
         $fields['CATEGORY_ID'] = implode(',', $this->getCategoryIdsByNames($blogId, $fields['CATEGORIES'] ?? []));
         $fields['PERMS_POST'] = $this->revertPostPerms($blogId, $fields['PERMS_POST'] ?? []);
@@ -562,37 +562,8 @@ class BlogHelper extends Helper
         return $fields;
     }
 
-    protected function prepareBlogFieldsForAdd(array $fields): array
-    {
-        global $DB;
-
-        if (empty($fields['=DATE_CREATE'])) {
-            $fields['=DATE_CREATE'] = $DB->CurrentTimeFunction();
-        }
-
-        if (empty($fields['=DATE_UPDATE'])) {
-            $fields['=DATE_UPDATE'] = $DB->CurrentTimeFunction();
-        }
-
-        return $fields;
-    }
-
-    protected function prepareBlogFieldsForUpdate(array $fields): array
-    {
-        global $DB;
-
-        if (empty($fields['=DATE_UPDATE'])) {
-            $fields['=DATE_UPDATE'] = $DB->CurrentTimeFunction();
-        }
-
-        return $fields;
-    }
-
     protected function prepareExportBlog(array $fields): array
     {
-        $fields = array_merge($this->getDefaultBlog(), $fields);
-        $fields = $this->normalizeUserGroups($fields);
-
         return $this->export(
             $fields,
             $this->getDefaultBlog(),
@@ -635,22 +606,20 @@ class BlogHelper extends Helper
         );
     }
 
-    protected function normalizeUserGroups(array $fields): array
+    protected function normalizeUserGroups(array $userGroups): array
     {
-        if (isset($fields['USER_GROUPS']) && is_array($fields['USER_GROUPS'])) {
-            $fields['USER_GROUPS'] = array_values(array_map(function ($item) {
-                return array_intersect_key(
-                    array_merge([
-                        'AUTO'          => 'N',
-                        'PERMS_POST'    => false,
-                        'PERMS_COMMENT' => false,
-                    ], $item),
-                    array_flip(['NAME', 'AUTO', 'PERMS_POST', 'PERMS_COMMENT'])
-                );
-            }, $fields['USER_GROUPS']));
-        }
+        $defaults = [
+            'NAME'          => '',
+            'AUTO'          => 'N',
+            'PERMS_POST'    => false,
+            'PERMS_COMMENT' => false,
+        ];
 
-        return $fields;
+        return array_map(
+            fn($item) => array_merge($defaults, array_intersect_key($item, $defaults)),
+            $userGroups
+        );
+
     }
 
     protected function exportUserGroups(array $blog): array
@@ -695,24 +664,24 @@ class BlogHelper extends Helper
         return $result;
     }
 
-    protected function saveUserGroups(int $blogId, array $items, bool $deleteOldGroups = true): void
+    protected function saveUserGroups(int $blogId, array $userGroups, bool $deleteOldGroups = true): void
     {
-        $items = $this->normalizeUserGroups(['USER_GROUPS' => $items])['USER_GROUPS'];
+        $userGroups = $this->normalizeUserGroups($userGroups);
         $currentGroups = $this->getUserGroups($blogId);
         $updatedIds = [];
         $autoGroupIds = [];
 
-        foreach ($items as $item) {
-            if (empty($item['NAME'])) {
+        foreach ($userGroups as $userGroup) {
+            if (empty($userGroup['NAME'])) {
                 continue;
             }
 
-            $groupId = $this->getUserGroupId($blogId, $item['NAME']);
+            $groupId = $this->getUserGroupId($blogId, $userGroup['NAME']);
 
             if (!$groupId) {
                 $groupId = (int)CBlogUserGroup::Add([
                     'BLOG_ID' => $blogId,
-                    'NAME'    => $item['NAME'],
+                    'NAME'    => $userGroup['NAME'],
                 ]);
             }
 
@@ -720,15 +689,15 @@ class BlogHelper extends Helper
                 continue;
             }
 
-            if ($item['PERMS_POST'] !== false) {
-                CBlogUserGroup::SetGroupPerms($groupId, $blogId, 0, $item['PERMS_POST'], BLOG_PERMS_POST);
+            if ($userGroup['PERMS_POST'] !== false) {
+                CBlogUserGroup::SetGroupPerms($groupId, $blogId, 0, $userGroup['PERMS_POST'], BLOG_PERMS_POST);
             }
 
-            if ($item['PERMS_COMMENT'] !== false) {
-                CBlogUserGroup::SetGroupPerms($groupId, $blogId, 0, $item['PERMS_COMMENT'], BLOG_PERMS_COMMENT);
+            if ($userGroup['PERMS_COMMENT'] !== false) {
+                CBlogUserGroup::SetGroupPerms($groupId, $blogId, 0, $userGroup['PERMS_COMMENT'], BLOG_PERMS_COMMENT);
             }
 
-            if ($item['AUTO'] === 'Y') {
+            if ($userGroup['AUTO'] === 'Y') {
                 $autoGroupIds[] = $groupId;
             }
 
@@ -885,7 +854,7 @@ class BlogHelper extends Helper
         $field = CUserTypeEntity::GetList(
             [],
             [
-                'ENTITY_ID' => 'BLOG_POST',
+                'ENTITY_ID'  => 'BLOG_POST',
                 'FIELD_NAME' => $fieldName,
             ]
         )->Fetch();
@@ -1008,9 +977,7 @@ class BlogHelper extends Helper
                 $result[$imageId] = [
                     'FILE'       => $file,
                     'TITLE'      => $image['TITLE'] ?? '',
-                    'USER_LOGIN' => HelperManager::getInstance()
-                        ->User()
-                        ->getUserLoginById((int)($image['USER_ID'] ?? $post['AUTHOR_ID'])),
+                    'USER_LOGIN' => $this->userHelper->getUserLoginById((int)($image['USER_ID'] ?? $post['AUTHOR_ID'])),
                     'IMAGE_SIZE' => $image['IMAGE_SIZE'] ?? '',
                 ];
             }
@@ -1085,8 +1052,8 @@ class BlogHelper extends Helper
         copy($source, $target);
 
         return [
-            'path' => $relativePath,
-            'name' => $fileName,
+            'path'   => $relativePath,
+            'name'   => $fileName,
             'source' => $link,
         ];
     }
@@ -1095,12 +1062,13 @@ class BlogHelper extends Helper
      * @throws HelperException
      */
     protected function savePostTextImages(
-        int $blogId,
-        int $postId,
-        array $fieldsForSave,
-        array $textImages,
+        int    $blogId,
+        int    $postId,
+        array  $fieldsForSave,
+        array  $textImages,
         string $exchangeDir = ''
-    ): void {
+    ): void
+    {
         if (empty($textImages)) {
             return;
         }
@@ -1141,12 +1109,13 @@ class BlogHelper extends Helper
     }
 
     protected function importPostBlogImages(
-        int $blogId,
-        int $postId,
-        int $authorId,
-        array $blogImages,
+        int    $blogId,
+        int    $postId,
+        int    $authorId,
+        array  $blogImages,
         string $exchangeDir = ''
-    ): array {
+    ): array
+    {
         if (empty($blogImages)) {
             return [];
         }
@@ -1166,9 +1135,7 @@ class BlogHelper extends Helper
 
             $userId = $authorId;
             if (!empty($image['USER_LOGIN'])) {
-                $userId = HelperManager::getInstance()
-                    ->User()
-                    ->getUserIdByLogin((string)$image['USER_LOGIN']);
+                $userId = $this->userHelper->getUserIdByLogin((string)$image['USER_LOGIN']);
             }
 
             $newImageId = CBlogImage::Add([
@@ -1194,8 +1161,8 @@ class BlogHelper extends Helper
         $dbres = CBlogImage::GetList(
             ['ID' => 'ASC'],
             [
-                'BLOG_ID' => $blogId,
-                'POST_ID' => $postId,
+                'BLOG_ID'    => $blogId,
+                'POST_ID'    => $postId,
                 'IS_COMMENT' => 'N',
             ],
             false,
@@ -1431,7 +1398,6 @@ class BlogHelper extends Helper
     protected function getDefaultBlog(): array
     {
         return [
-            'GROUP'             => [],
             'OWNER_LOGIN'       => '',
             'NAME'              => '',
             'DESCRIPTION'       => '',
@@ -1457,32 +1423,32 @@ class BlogHelper extends Helper
     protected function getDefaultPost(): array
     {
         return [
-            'AUTHOR_LOGIN'       => '',
-            'TITLE'              => '',
-            'PREVIEW_TEXT'       => '',
-            'PREVIEW_TEXT_TYPE'  => 'text',
-            'DETAIL_TEXT'        => '',
-            'DETAIL_TEXT_TYPE'   => 'text',
-            'DATE_CREATE'        => '',
-            'DATE_PUBLISH'       => '',
-            'KEYWORDS'           => '',
-            'PUBLISH_STATUS'     => BLOG_PUBLISH_STATUS_PUBLISH,
-            'ATRIBUTE'           => '',
-            'ENABLE_TRACKBACK'   => 'Y',
-            'ENABLE_COMMENTS'    => 'Y',
-            'ATTACH_IMG'         => false,
-            'FAVORITE_SORT'      => false,
-            'PATH'               => '',
-            'CODE'               => '',
-            'MICRO'              => 'N',
-            'SEO_TITLE'          => '',
-            'SEO_TAGS'           => '',
-            'SEO_DESCRIPTION'    => '',
-            'CATEGORIES'         => [],
-            'PERMS_POST'         => [],
-            'PERMS_COMMENT'      => [],
-            'UF_VALUES'          => [],
-            'TEXT_IMAGES'        => [],
+            'AUTHOR_LOGIN'      => '',
+            'TITLE'             => '',
+            'PREVIEW_TEXT'      => '',
+            'PREVIEW_TEXT_TYPE' => 'text',
+            'DETAIL_TEXT'       => '',
+            'DETAIL_TEXT_TYPE'  => 'text',
+            'DATE_CREATE'       => '',
+            'DATE_PUBLISH'      => '',
+            'KEYWORDS'          => '',
+            'PUBLISH_STATUS'    => BLOG_PUBLISH_STATUS_PUBLISH,
+            'ATRIBUTE'          => '',
+            'ENABLE_TRACKBACK'  => 'Y',
+            'ENABLE_COMMENTS'   => 'Y',
+            'ATTACH_IMG'        => false,
+            'FAVORITE_SORT'     => false,
+            'PATH'              => '',
+            'CODE'              => '',
+            'MICRO'             => 'N',
+            'SEO_TITLE'         => '',
+            'SEO_TAGS'          => '',
+            'SEO_DESCRIPTION'   => '',
+            'CATEGORIES'        => [],
+            'PERMS_POST'        => [],
+            'PERMS_COMMENT'     => [],
+            'UF_VALUES'         => [],
+            'TEXT_IMAGES'       => [],
         ];
     }
 
